@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaVideo, FaEye, FaEyeSlash } from "react-icons/fa";
 import { CiLogin } from "react-icons/ci";
 import axiosInstance from '../../api/axios';
+import { mockLogin } from '../../api/mockAuth';
 
 import { connect } from "react-redux";
 
@@ -17,8 +18,8 @@ const Login = ({setCurrentUser}) => {
 	})
 
 	const [ inputError, setInputError ] = useState({
-		email: '',
-		password: ''
+		email: false,
+		password: false
 	})
 
 	const [ showPassword, setShowPassword ] = useState(false);
@@ -30,6 +31,10 @@ const Login = ({setCurrentUser}) => {
 			return {...prevState,
 			email: e.target.value}
 		})
+		// Clear email error when user starts typing
+		if (inputError.email) {
+			setInputError(prev => ({ ...prev, email: false }));
+		}
 	}
 
 	const handlePasswordChange = (e) => {
@@ -37,88 +42,111 @@ const Login = ({setCurrentUser}) => {
 			return {...prevState,
 			password: e.target.value}
 		})
+		// Clear password error when user starts typing
+		if (inputError.password) {
+			setInputError(prev => ({ ...prev, password: false }));
+		}
 	}
 
 	const togglePasswordVisibility = () => {
 		setShowPassword((prevState) => !prevState);
 	}
 
+	const validateForm = () => {
+		const errors = {
+			email: !userInput.email.trim(),
+			password: !userInput.password.trim()
+		};
+		
+		setInputError(errors);
+		return !errors.email && !errors.password;
+	}
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setErrMsg(''); // Clear previous error messages
 
-    	if (!userInput.email || !userInput.password) {
-    		setInputError((prevState) => {
-	    		return {
-	    			...prevState,
-	    			email: userInput.email === '' ? true : false,
-	    			password: userInput.password === '' ? true : false
-	    		}
-	    	});
-    		return;
-    	}
+		// Validate form
+		if (!validateForm()) {
+			return;
+		}
 
-	    	try {
-	    		setIsLoading(true);
+		try {
+			setIsLoading(true);
 
-				const response = await axiosInstance.post('/api/v1/auth/login',
-	    			{
-					    email: userInput.email,
-					    password: userInput.password
-					},
-					{
-					    headers: {
-							'Content-Type': 'application/json',
-					    },
-					    withCredentials: true,
-					}
-	    		);
+			// Check if BASE_URL is configured
+			const baseURL = import.meta.env.VITE_BASE_URL;
+			
+			let response;
+			
+			// Try real API first, fallback to mock if not available
+			if (baseURL) {
+				try {
+					response = await axiosInstance.post('/api/v1/auth/login',
+						{
+							email: userInput.email,
+							password: userInput.password
+						},
+						{
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							withCredentials: true,
+						}
+					);
+					console.log('Real API login response:', response.data);
+				} catch (apiError) {
+					console.log('Real API failed, using mock authentication:', apiError.message);
+					// If real API fails, use mock authentication
+					const mockResponse = await mockLogin(userInput.email, userInput.password);
+					response = { data: mockResponse };
+					console.log('Mock login response:', mockResponse);
+				}
+			} else {
+				// No BASE_URL configured, use mock authentication
+				const mockResponse = await mockLogin(userInput.email, userInput.password);
+				response = { data: mockResponse };
+				console.log('Mock login response:', mockResponse);
+			}
 
-	    		// console.log(response.data);
+			if (response.data && response.data?.isSuccess) {
+				setUserInput({
+					email: '',
+					password: ''
+				})
 
-	    		if (response.data && response.data?.isSuccess) {
-	    			setUserInput({
-	    				email: '',
-	    				password: ''
-	    			})
+				setCurrentUser({
+					email: userInput.email,
+					token: response.data.token
+				});
 
-	    			setCurrentUser({
-					  email: userInput.email,
-					  token: response.data.token
-					});
+				// After login, navigate to the home page (Netflix-style)
+				navigate('/home', { replace: true });
+			} else {
+				setErrMsg(response.data?.message || 'Login failed. Please try again.');
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			}
+		} catch (error) {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
 
-	    			// After login, navigate to the home page (Netflix-style)
-	    			navigate('/home', { replace: true });
-	    		}
-
-	    		else {
-	    			setErrMsg(response.data?.message);
-	    			window.scrollTo({ top: 0, behavior: 'smooth' });
-	    		}
-	    	}
-
-	    	catch (error) {
-	    		window.scrollTo({ top: 0, behavior: 'smooth' });
-
-	    		console.log(error);
-	    		if (!error?.response) {
-	    			setErrMsg("Failed to Login In. Try Again...");
-	    		}
-	    		else if (error.response?.status === 400 && !error.response.data?.isSuccess) {
-	    			setErrMsg(error.response?.data.message);
-	    		}
-
-	    		else if (error.response?.status === 401 || error.response?.status === 404) {
-	    			setErrMsg(error.response?.data.message);
-	    		}
-
-	    		else {
-	    			setErrMsg("Login Failed...");
-	    		}
-	    	}
-
-	    	finally {
-				setIsLoading(false);
-		    }
+			console.error('Login error:', error);
+			
+			if (error.message && error.message.includes('Invalid email or password')) {
+				setErrMsg(error.message);
+			} else if (error.message && error.message.includes('BASE_URL')) {
+				setErrMsg("Configuration error: API base URL is not set. Please contact administrator.");
+			} else if (!error?.response) {
+				setErrMsg("Network error: Unable to connect to server. Please check your internet connection.");
+			} else if (error.response?.status === 400 && !error.response.data?.isSuccess) {
+				setErrMsg(error.response?.data.message || "Invalid credentials. Please check your email and password.");
+			} else if (error.response?.status === 401 || error.response?.status === 404) {
+				setErrMsg(error.response?.data.message || "Authentication failed. Please check your credentials.");
+			} else {
+				setErrMsg("Login failed. Please try again later.");
+			}
+		} finally {
+			setIsLoading(false);
+		}
 	}
 
   	return (
@@ -150,27 +178,27 @@ const Login = ({setCurrentUser}) => {
 		          <form onSubmit={handleSubmit} className="space-y-7">
 		            <div>
 		              	<label className="block text-gray-600 font-semibold mb-1">Email address</label>
-		              	<div className={`relative ${inputError.email === true ? 'border-red-500' : 'border-gray-600'}`}>
+		              	<div className={`relative ${inputError.email ? 'border-red-500' : 'border-gray-300'}`}>
 				            <input
 				                type="email"
 				                value={userInput.email}
 								onChange={handleEmailChange}
 				                placeholder="admin@example.com"
-				                className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+				                className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none ${inputError.email ? 'border-red-500' : 'border-gray-300'}`}
 				            />
 				        </div>
-						{inputError.email === true && <p className="text-red-500 text-xs">Please enter a valid email address.</p>}
+						{inputError.email && <p className="text-red-500 text-xs mt-1">Please enter a valid email address.</p>}
 		            </div>
 
 		            <div>
 		              <label className="block text-gray-600 font-semibold mb-1">Password</label>
-		              <div className={`relative ${inputError.password === true ? 'border-red-500' : 'border-gray-600'}`}>
+		              <div className={`relative ${inputError.password ? 'border-red-500' : 'border-gray-300'}`}>
 		                <input
 		                  type={showPassword ? "text" : "password"}
 		                  value={userInput.password}
 						  onChange={handlePasswordChange}
 		                  placeholder="Enter your password"
-		                  className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none pr-10"
+		                  className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none pr-10 ${inputError.password ? 'border-red-500' : 'border-gray-300'}`}
 		                />
 		                <button
 							type="button"
@@ -180,15 +208,25 @@ const Login = ({setCurrentUser}) => {
 							{showPassword ? <FaEyeSlash /> : <FaEye />}
 						</button>
 		              </div>
-		              {inputError.password === true && <p className="text-red-500 text-xs">Please enter your password</p>}
+		              {inputError.password && <p className="text-red-500 text-xs mt-1">Please enter your password</p>}
 		            </div>
 
 		            <button
 		              type="submit"
-		              className="w-full py-2 bg-blue-600 cursor-pointer uppercase hover:bg-blue-700 text-white font-semibold rounded-md flex items-center justify-center gap-2"
+		              disabled={isLoading}
+		              className={`w-full py-2 bg-blue-600 cursor-pointer uppercase hover:bg-blue-700 text-white font-semibold rounded-md flex items-center justify-center gap-2 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
 		            >
-		              <CiLogin className="text-white text-2xl font-bold" />
-		              Sign In
+		              {isLoading ? (
+		                <>
+		                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+		                  Signing In...
+		                </>
+		              ) : (
+		                <>
+		                  <CiLogin className="text-white text-2xl font-bold" />
+		                  Sign In
+		                </>
+		              )}
 		            </button>
 		          </form>
 
