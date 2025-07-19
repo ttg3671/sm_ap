@@ -1,10 +1,8 @@
 import { axiosPrivate } from '../api/axios';
-
 import { useEffect } from 'react';
-
 import { useSelector } from 'react-redux';
-
 import useRefreshToken from './useRefreshToken';
+import { isTokenValid } from '../utils/tokenUtils';
 
 const useAxiosPrivate = () => {
 	const refresh = useRefreshToken();
@@ -16,8 +14,19 @@ const useAxiosPrivate = () => {
 	useEffect(() => {
 		const requestIntercept = axiosPrivate.interceptors.request.use(
 			config => {
-				if (!config.headers['Authorization']) {
-					config.headers['Authorization'] = `MXDSAW ${userFromRedux?.token}`;
+				if (!config.headers['Authorization'] && userFromRedux?.token) {
+					// Check if token is valid before using it
+					if (isTokenValid(userFromRedux.token)) {
+						config.headers['Authorization'] = `Bearer ${userFromRedux.token}`;
+					} else {
+						console.warn('Invalid token detected, attempting refresh...');
+						// Token is invalid, trigger refresh
+						refresh().then(newToken => {
+							if (newToken) {
+								config.headers['Authorization'] = `Bearer ${newToken}`;
+							}
+						});
+					}
 				}
 				return config;
 			}, (error) => Promise.reject(error)
@@ -32,9 +41,14 @@ const useAxiosPrivate = () => {
 					prevRequest.sent = true;
 					const newAccessToken = await refresh();
 
-					// console.log(newAccessToken);
-					prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-					return axiosPrivate(prevRequest);
+					if (newAccessToken) {
+						prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+						return axiosPrivate(prevRequest);
+					} else {
+						// If refresh token fails, redirect to login
+						window.location.href = '/';
+						return Promise.reject(error);
+					}
 				}
 
 				return Promise.reject(error);

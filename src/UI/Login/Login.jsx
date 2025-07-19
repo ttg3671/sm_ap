@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { FaVideo, FaEye, FaEyeSlash } from "react-icons/fa";
 import { CiLogin } from "react-icons/ci";
 import axiosInstance from '../../api/axios';
-import { mockLogin } from '../../api/mockAuth';
 
 import { connect } from "react-redux";
 
@@ -76,38 +75,24 @@ const Login = ({setCurrentUser}) => {
 
 			// Check if BASE_URL is configured
 			const baseURL = import.meta.env.VITE_BASE_URL;
-			
-			let response;
-			
-			// Try real API first, fallback to mock if not available
-			if (baseURL) {
-				try {
-					response = await axiosInstance.post('/api/v1/auth/login',
-						{
-							email: userInput.email,
-							password: userInput.password
-						},
-						{
-							headers: {
-								'Content-Type': 'application/json',
-							},
-							withCredentials: true,
-						}
-					);
-					console.log('Real API login response:', response.data);
-				} catch (apiError) {
-					console.log('Real API failed, using mock authentication:', apiError.message);
-					// If real API fails, use mock authentication
-					const mockResponse = await mockLogin(userInput.email, userInput.password);
-					response = { data: mockResponse };
-					console.log('Mock login response:', mockResponse);
-				}
-			} else {
-				// No BASE_URL configured, use mock authentication
-				const mockResponse = await mockLogin(userInput.email, userInput.password);
-				response = { data: mockResponse };
-				console.log('Mock login response:', mockResponse);
+			if (!baseURL) {
+				throw new Error("API base URL is not configured. Please check your environment variables.");
 			}
+
+			const response = await axiosInstance.post('/api/v1/auth/login',
+				{
+					email: userInput.email,
+					password: userInput.password
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					withCredentials: true,
+				}
+			);
+
+			console.log('Login response:', response.data);
 
 			if (response.data && response.data?.isSuccess) {
 				setUserInput({
@@ -115,10 +100,13 @@ const Login = ({setCurrentUser}) => {
 					password: ''
 				})
 
-				setCurrentUser({
+				const userData = {
 					email: userInput.email,
 					token: response.data.token
-				});
+				};
+
+				console.log('Setting user data:', userData);
+				setCurrentUser(userData);
 
 				// After login, navigate to the home page (Netflix-style)
 				navigate('/home', { replace: true });
@@ -131,9 +119,7 @@ const Login = ({setCurrentUser}) => {
 
 			console.error('Login error:', error);
 			
-			if (error.message && error.message.includes('Invalid email or password')) {
-				setErrMsg(error.message);
-			} else if (error.message && error.message.includes('BASE_URL')) {
+			if (error.message && error.message.includes('BASE_URL')) {
 				setErrMsg("Configuration error: API base URL is not set. Please contact administrator.");
 			} else if (!error?.response) {
 				setErrMsg("Network error: Unable to connect to server. Please check your internet connection.");
