@@ -1,1 +1,0 @@
-export const SET_RESET_TOKEN = 'SET_RESET_TOKEN';
