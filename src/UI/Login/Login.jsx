@@ -6,10 +6,12 @@ import { AiOutlineMail, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineHeart } fr
 import { FiLogIn } from 'react-icons/fi';
 import { BsAward } from 'react-icons/bs';
 import { loginStart, loginSuccess, loginFailure } from '../../store/authSlice';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { switchTheme } = useTheme();
   
   // Get state from Redux store with fallback
   const auth = useSelector((state) => state?.auth || {});
@@ -89,6 +91,12 @@ const LoginPage = () => {
           // Store token for API calls
           sessionStorage.setItem('authToken', result.token);
           sessionStorage.setItem('userEmail', formData.email);
+          
+          // Save selected theme for dashboard
+          switchTheme(currentTheme);
+          sessionStorage.setItem('selectedTheme', currentTheme);
+          localStorage.setItem('selectedTheme', currentTheme);
+          
           window.dispatchEvent(new Event('sessionStorageChange'));
           
           navigate('/index');
@@ -117,6 +125,12 @@ const LoginPage = () => {
           
           sessionStorage.setItem('authToken', demoToken);
           sessionStorage.setItem('userEmail', formData.email);
+          
+          // Save selected theme for dashboard
+          switchTheme(currentTheme);
+          sessionStorage.setItem('selectedTheme', currentTheme);
+          localStorage.setItem('selectedTheme', currentTheme);
+          
           window.dispatchEvent(new Event('sessionStorageChange'));
           navigate('/index');
           return;

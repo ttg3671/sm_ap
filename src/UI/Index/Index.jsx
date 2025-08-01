@@ -6,6 +6,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { MdChevronLeft, MdChevronRight, MdDashboard, MdTrendingUp, MdMovie, MdAdd, MdError, MdBarChart } from "react-icons/md";
 import { FiUsers, FiGrid, FiPlus } from "react-icons/fi";
 import { BiCategoryAlt } from "react-icons/bi";
+import { useTheme } from '../../contexts/ThemeContext';
 import axios from 'axios';
 
 const Index = () => {
@@ -19,6 +20,7 @@ const Index = () => {
 	const axiosPrivate = useAxiosPrivate();
 	const navigate = useNavigate();
 	const location = useLocation();
+	const { colors, tailwind } = useTheme();
 
     useEffect(() => {
         const controller = new AbortController();
@@ -246,13 +248,13 @@ const Index = () => {
 				<Navbar />
 
 				<motion.div 
-					className="col-span-full flex flex-col items-center justify-start pt-24 px-4 w-full min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50"
+					className={`col-span-full flex flex-col items-center justify-start pt-24 px-4 w-full min-h-screen bg-gradient-to-br from-gray-50 via-white to-${tailwind.card}`}
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.6 }}
 				>
 		          	<motion.h1 
-		          		className="text-4xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-wide"
+		          		className={`text-4xl font-bold mb-8 bg-gradient-to-r from-${tailwind.text} to-${tailwind.secondary} bg-clip-text text-transparent tracking-wide`}
 		          		initial={{ opacity: 0, y: -20 }}
 		          		animate={{ opacity: 1, y: 0 }}
 		          		transition={{ duration: 0.6, delay: 0.2 }}
@@ -288,7 +290,7 @@ const Index = () => {
 		        				animate={{ opacity: 1, x: 0 }}
 		        				transition={{ duration: 0.5, delay: 0.4 }}
 		        			>
-		        				<div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg">
+		        				<div className={`p-2 bg-gradient-to-r from-${tailwind.primary} to-${tailwind.secondary} rounded-lg`}>
 		        					<MdDashboard className="text-white" size={24} />
 		        				</div>
 		        				<h2 className="text-2xl font-bold text-gray-800">Current Content</h2>
@@ -296,18 +298,18 @@ const Index = () => {
 
 			            	{isLoading ? (
 			            		<motion.div 
-			            			className="relative z-10 flex flex-col justify-center items-center h-64 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl"
+			            			className={`relative z-10 flex flex-col justify-center items-center h-64 bg-gradient-to-br from-${tailwind.card} to-${tailwind.accent} rounded-xl`}
 			            			initial={{ opacity: 0 }}
 			            			animate={{ opacity: 1 }}
 			            			transition={{ duration: 0.3 }}
 			            		>
 			            			<motion.div 
-			            				className="w-16 h-16 border-4 border-blue-200 rounded-full border-t-blue-600"
+			            				className={`w-16 h-16 border-4 border-${tailwind.accent} rounded-full border-t-${tailwind.primary}`}
 			            				animate={{ rotate: 360 }}
 			            				transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
 			            			/>
 			            			<motion.p 
-			            				className="mt-4 text-blue-600 font-medium"
+			            				className={`mt-4 text-${tailwind.primary} font-medium`}
 			            				initial={{ opacity: 0 }}
 			            				animate={{ opacity: 1 }}
 			            				transition={{ delay: 0.2 }}
@@ -337,7 +339,7 @@ const Index = () => {
 		        		</div>
 
 		        		{/* Add More Section */}
-		        		<div className="border-t border-gray-200 bg-gradient-to-r from-gray-50 to-blue-50 p-8">
+		        		<div className={`border-t border-gray-200 bg-gradient-to-r from-gray-50 to-${tailwind.card} p-8`}>
 		        			<motion.div 
 		        				className="flex items-center justify-center gap-3 mb-6"
 		        				initial={{ opacity: 0, y: 20 }}
@@ -358,7 +360,7 @@ const Index = () => {
 		        				transition={{ duration: 0.5, delay: 0.7 }}
 		        			>
 		        				<div className="flex items-center gap-2 mb-4">
-		        					<MdMovie className="text-blue-600" size={20} />
+		        					<MdMovie className={`text-${tailwind.primary}`} size={20} />
 		        					<h4 className="text-lg font-semibold text-gray-700">Movies & Series</h4>
 		        				</div>
 			            		{isLoading ? (
@@ -368,7 +370,7 @@ const Index = () => {
 			            				animate={{ opacity: 1 }}
 			            			>
 			            				<motion.div 
-			            					className="w-8 h-8 border-2 border-blue-200 rounded-full border-t-blue-600"
+			            					className={`w-8 h-8 border-2 border-${tailwind.accent} rounded-full border-t-${tailwind.primary}`}
 			            					animate={{ rotate: 360 }}
 			            					transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
 			            				/>
@@ -438,7 +440,7 @@ const Index = () => {
 			            	>
 		                        <div className="flex items-center justify-center gap-4">
 		                            <motion.button
-		                                className={`p-3 text-gray-800 rounded-full transition-all duration-200 ${page === 1 ? "cursor-not-allowed opacity-50" : "hover:bg-blue-100 hover:text-blue-600"}`}
+		                                className={`p-3 text-gray-800 rounded-full transition-all duration-200 ${page === 1 ? "cursor-not-allowed opacity-50" : `hover:bg-${tailwind.card} hover:text-${tailwind.primary}`}`}
 		                                onClick={() => handlePageChange(page - 1)}
 		                                disabled={page === 1}
 		                                whileHover={{ scale: page === 1 ? 1 : 1.1 }}
@@ -452,7 +454,7 @@ const Index = () => {
 		                                {getPageNumbers().map((pageNumber) => (
 		                                    <motion.button
 		                                        key={pageNumber}
-		                                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${page === pageNumber ? "bg-blue-500 text-white shadow-lg" : "text-gray-700 hover:bg-gray-200"}`}
+		                                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${page === pageNumber ? `bg-${tailwind.primary} text-white shadow-lg` : "text-gray-700 hover:bg-gray-200"}`}
 		                                        onClick={() => handlePageChange(pageNumber)}
 		                                        disabled={pageNumber > totalItems}
 		                                        whileHover={{ scale: 1.05 }}
@@ -464,7 +466,7 @@ const Index = () => {
 		                            </div>
 
 		                            <motion.button
-		                                className={`p-3 text-gray-800 rounded-full transition-all duration-200 ${page === totalItems ? "cursor-not-allowed opacity-50" : "hover:bg-blue-100 hover:text-blue-600"}`}
+		                                className={`p-3 text-gray-800 rounded-full transition-all duration-200 ${page === totalItems ? "cursor-not-allowed opacity-50" : `hover:bg-${tailwind.card} hover:text-${tailwind.primary}`}`}
 		                                onClick={() => handlePageChange(page + 1)}
 		                                disabled={page === totalItems}
 		                                whileHover={{ scale: page === totalItems ? 1 : 1.1 }}
