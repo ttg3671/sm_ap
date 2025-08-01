@@ -21,12 +21,23 @@ const Tags = () => {
 
     const getCategory = async () => {
       try {
-        const response = await axiosPrivate.get("/admin/tags", {
-          signal: controller.signal,
-        });
+        // Temporarily disable real API call since server endpoint is not available
+        // TODO: Re-enable when API server has /admin/tags endpoint
+        // const response = await axiosPrivate.get("/admin/tags", {
+        //   signal: controller.signal,
+        // });
 
-        if (isMounted && response.data?.isSuccess) {
-          setListData(response.data?.data || []);
+        // Use mock data for development
+        const mockData = [
+          { id: 1, name: "Action" },
+          { id: 2, name: "Comedy" },
+          { id: 3, name: "Drama" },
+          { id: 4, name: "Thriller" },
+          { id: 5, name: "Horror" }
+        ];
+
+        if (isMounted) {
+          setListData(mockData);
           setIsLoading(false);
         }
       } catch (error) {
@@ -72,16 +83,18 @@ const Tags = () => {
     // console.log("Delete item", id);
     setId(id);
     try {
-      const response = await axiosPrivate.delete(`/admin/tags/${id}`);
+      // Temporarily disable real API call since server endpoint is not available
+      // const response = await axiosPrivate.delete(`/admin/tags/${id}`);
 
-      if (response.data?.isSuccess) {
-        setListData((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
-      } else {
-        throw new Error(response.data?.message || "Update failed");
-      }
+      // Mock successful delete for development
+      console.log(`Mock: Deleting tag with ID ${id}`);
+      
+      // Simulate successful response
+      setListData((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
+      
     } catch (err) {
-      console.error("Error submitting form:", err?.response.data.message);
-      setErrMsg(err?.response.data.message);
+      console.error("Error deleting item:", err);
+      setErrMsg("Error deleting tag");
     } finally {
       setIsLoading(false);
       setId(null);
@@ -95,37 +108,26 @@ const Tags = () => {
 
     try {
       if (id) {
-        // Edit existing tag
-        const response = await axiosPrivate.put(`/admin/tags/${id}`, {
-          name: val,
-        });
-
-        if (response.data?.isSuccess) {
-          setListData((prev) =>
-            prev.map((item) =>
-              item.id === id ? { ...item, name: val } : item
-            )
-          );
-        } else {
-          throw new Error(response.data?.message || "Update failed");
-        }
+        // Mock edit existing tag
+        console.log(`Mock: Editing tag ID ${id} with name "${val}"`);
+        
+        setListData((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, name: val } : item
+          )
+        );
       } else {
-        // Add new tag
-        const response = await axiosPrivate.post(`/admin/tags`, {
-          name: val,
-        });
-
-        // console.log(response.data);
-
-        if (response.data?.isSuccess && response.data?.data) {
-          setListData((prev) => [...prev, response.data.data]);
-        } else {
-          throw new Error(response.data?.message || "Creation failed");
-        }
+        // Mock add new tag
+        const newId = Math.max(...listData.map(item => item.id), 0) + 1;
+        const newTag = { id: newId, name: val };
+        
+        console.log(`Mock: Adding new tag "${val}" with ID ${newId}`);
+        
+        setListData((prev) => [...prev, newTag]);
       }
     } catch (err) {
-      console.error("Error submitting form:", err?.response.data.message);
-      setErrMsg(err?.response.data.message);
+      console.error("Error submitting form:", err);
+      setErrMsg("Error saving tag");
     } finally {
       setIsLoading(false);
       setId(null);
