@@ -43,23 +43,28 @@ const Navbar = ({ currentUser, logoutUser }) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-16 left-0 h-[calc(100%-4rem)] w-64 bg-gray-400 shadow-lg transform transition-transform duration-300 z-40 ${
+        className={`fixed top-16 left-0 h-[calc(100%-4rem)] w-64 ${isGolden ? 'bg-gradient-to-b from-amber-100 via-yellow-50 to-amber-100 border-r-4 border-amber-300' : 'bg-gradient-to-b from-emerald-100 via-teal-50 to-emerald-100 border-r-4 border-emerald-300'} shadow-2xl transform transition-all duration-300 z-40 backdrop-blur-sm ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
+        {/* Sidebar Header */}
+        <div className={`p-4 ${isGolden ? 'bg-gradient-to-r from-amber-600 to-yellow-600' : 'bg-gradient-to-r from-emerald-600 to-teal-600'} text-white`}>
+          <h3 className="text-lg font-bold">Navigation</h3>
+        </div>
+        
         {/* Nav Links */}
-        <ul className="p-4 space-y-4 text-white">
-          <li><Link to="/home" className="text-lg hover:text-black font-bold hover:text-xl">Home</Link></li>
-          <li><Link to="/users" className="text-lg hover:text-black font-bold hover:text-xl">Users</Link></li>
-          <li><Link to="/genres" className="text-lg hover:text-black font-bold hover:text-xl">Genre</Link></li>
-          <li><Link to="/tags" className="text-lg hover:text-black font-bold hover:text-xl">Tags</Link></li>
-          <li><Link to="/age" className="text-lg hover:text-black font-bold hover:text-xl">Watch-age</Link></li>
-          <li><Link to="/slider" className="text-lg hover:text-black font-bold hover:text-xl">Slider</Link></li>
-          <li><Link to="/webseries" className="text-lg hover:text-black font-bold hover:text-xl">Webseries</Link></li>
-          <li><Link to="/movies" className="text-lg hover:text-black font-bold hover:text-xl">Movies</Link></li>
-          <li><Link to="/contents" className="text-lg hover:text-black font-bold hover:text-xl">Upload Content</Link></li>
-          <li><Link to="/trending" className="text-lg hover:text-black font-bold hover:text-xl">Trending</Link></li>
-          <li><a onClick={handleLogout} className="cursor-pointer text-lg hover:text-black font-bold hover:text-xl">Logout</a></li>
+        <ul className="p-4 space-y-3">
+          <li><Link to="/home" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>🏠 Home</Link></li>
+          <li><Link to="/users" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>👥 Users</Link></li>
+          <li><Link to="/genres" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>🎭 Genre</Link></li>
+          <li><Link to="/tags" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>🏷️ Tags</Link></li>
+          <li><Link to="/age" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>🔞 Watch-age</Link></li>
+          <li><Link to="/slider" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>🎞️ Slider</Link></li>
+          <li><Link to="/webseries" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>📺 Webseries</Link></li>
+          <li><Link to="/movies" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>🎬 Movies</Link></li>
+          <li><Link to="/contents" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>⬆️ Upload Content</Link></li>
+          <li><Link to="/trending" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>🔥 Trending</Link></li>
+          <li><a onClick={handleLogout} className={`block cursor-pointer text-lg font-semibold ${isGolden ? 'text-red-600 hover:text-red-500 hover:bg-red-50' : 'text-red-600 hover:text-red-500 hover:bg-red-50'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>🚪 Logout</a></li>
         </ul>
       </div>
 

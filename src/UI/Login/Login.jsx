@@ -629,21 +629,17 @@ const LoginPage = () => {
                 onChange={handleInputChange}
                 style={{
                   width: '100%',
-                  padding: '14px 42px 14px 14px',
-                  borderRadius: '10px',
+                  padding: '16px 50px 16px 16px',
+                  borderRadius: '12px',
                   border: `2px solid rgba(255, 255, 255, 0.1)`,
                   background: 'rgba(255, 255, 255, 0.05)',
                   color: 'white',
-                  fontSize: '14px',
+                  fontSize: '16px',
                   outline: 'none',
                   transition: 'all 0.3s ease',
-                  boxSizing: 'border-box'
-                }}
-                animate={{
-                  padding: ['14px 42px 14px 14px', '16px 50px 16px 16px'],
-                  borderRadius: ['10px', '12px'],
-                  fontSize: ['14px', '16px'],
-                  transition: { duration: 0.3, delay: 0.3 }
+                  boxSizing: 'border-box',
+                  lineHeight: '1.5',
+                  height: '56px'
                 }}
                 whileFocus={{
                   borderColor: currentColors.primary,
@@ -654,12 +650,17 @@ const LoginPage = () => {
               <AiOutlineMail
                 style={{
                   position: 'absolute',
-                  right: '16px',
+                  right: '12px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: currentColors.primary
+                  color: currentColors.primary,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '32px',
+                  height: '32px'
                 }}
-                size={20}
+                size={22}
               />
             </motion.div>
           </motion.div>
@@ -691,21 +692,17 @@ const LoginPage = () => {
                 onChange={handleInputChange}
                 style={{
                   width: '100%',
-                  padding: '14px 42px 14px 14px',
-                  borderRadius: '10px',
+                  padding: '16px 50px 16px 16px',
+                  borderRadius: '12px',
                   border: `2px solid rgba(255, 255, 255, 0.1)`,
                   background: 'rgba(255, 255, 255, 0.05)',
                   color: 'white',
-                  fontSize: '14px',
+                  fontSize: '16px',
                   outline: 'none',
                   transition: 'all 0.3s ease',
-                  boxSizing: 'border-box'
-                }}
-                animate={{
-                  padding: ['14px 42px 14px 14px', '16px 50px 16px 16px'],
-                  borderRadius: ['10px', '12px'],
-                  fontSize: ['14px', '16px'],
-                  transition: { duration: 0.3, delay: 0.35 }
+                  boxSizing: 'border-box',
+                  lineHeight: '1.5',
+                  height: '56px'
                 }}
                 whileFocus={{
                   borderColor: currentColors.primary,
@@ -718,18 +715,28 @@ const LoginPage = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 style={{
                   position: 'absolute',
-                  right: '16px',
+                  right: '12px',
                   top: '50%',
                   transform: 'translateY(-50%)',
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: currentColors.primary
+                  color: currentColors.primary,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '32px',
+                  height: '32px',
+                  zIndex: 10,
+                  borderRadius: '6px'
                 }}
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ 
+                  scale: 1.1,
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                }}
                 whileTap={{ scale: 0.9 }}
               >
-                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+                {showPassword ? <AiOutlineEyeInvisible size={22} /> : <AiOutlineEye size={22} />}
               </motion.button>
             </motion.div>
           </motion.div>
