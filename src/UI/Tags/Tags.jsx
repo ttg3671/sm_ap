@@ -2,6 +2,7 @@ import { useState, useEffect, Fragment } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Outer, Navbar, DataList, DataForm } from "../../components";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Tags = () => {
   const [listData, setListData] = useState([]);
@@ -10,6 +11,7 @@ const Tags = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { isGolden, isEmerald } = useTheme();
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -161,7 +163,10 @@ const Tags = () => {
                 <DataForm handleSubmit={handleFormSubmit} value={newCategory} id={id} isAge={false} />
 
                 {/* Data Table Section */}
-                <div className="w-full max-w-4xl overflow-x-auto bg-white shadow-md rounded-lg">
+                <div className={`w-full max-w-4xl overflow-x-auto shadow-md rounded-lg ${
+                  isGolden ? 'bg-gradient-to-br from-amber-50 to-orange-50' : 
+                  isEmerald ? 'bg-gradient-to-br from-emerald-50 to-teal-50' : 'bg-white'
+                }`}>
                   {listData && listData.length > 0 ? (
                     // <DataList itemList={listData} isAge={false} isCategory={false} />
                     <DataList
@@ -172,8 +177,21 @@ const Tags = () => {
                       onDelete={handleDelete}
                     />
                   ) : (
-                    <div className="text-center py-10 text-gray-500">
-                      No content tag found.
+                    <div className={`text-center py-10 ${
+                      isGolden ? 'text-amber-600' : 
+                      isEmerald ? 'text-emerald-600' : 'text-gray-500'
+                    }`}>
+                      {isLoading ? (
+                        <div className="flex items-center justify-center">
+                          <div className={`animate-spin rounded-full h-8 w-8 border-b-2 ${
+                            isGolden ? 'border-amber-600' : 
+                            isEmerald ? 'border-emerald-600' : 'border-gray-500'
+                          }`}></div>
+                          <span className="ml-2">Loading tags...</span>
+                        </div>
+                      ) : (
+                        "No content tag found."
+                      )}
                     </div>
                   )}
                 </div>

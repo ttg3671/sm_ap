@@ -3,6 +3,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useNavigate, useLocation } from "react-router-dom";
 import { Outer, Navbar, ContentCardList } from "../../components";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { useTheme } from '../../contexts/ThemeContext';
 
 const WebSeries = () => {
     const [contentList, setContentList] = useState([]);
@@ -16,6 +17,7 @@ const WebSeries = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const axiosPrivate = useAxiosPrivate();
+    const { isGolden, isEmerald } = useTheme();
 
     useEffect(() => {
         let isMounted = true;

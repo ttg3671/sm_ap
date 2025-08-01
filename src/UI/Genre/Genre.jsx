@@ -2,6 +2,7 @@ import { useState, useEffect, Fragment } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Outer, Navbar, DataList, DataForm } from "../../components";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Genre = () => {
   const [listData, setListData] = useState([]);
@@ -10,6 +11,7 @@ const Genre = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { isGolden, isEmerald } = useTheme();
 
   const axiosPrivate = useAxiosPrivate();
 

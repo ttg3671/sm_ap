@@ -3,6 +3,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useNavigate, useLocation } from "react-router-dom";
 import { Outer, Navbar, ContentCardList } from "../../components";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Movies = () => {
     const [contentList, setContentList] = useState([]);
@@ -16,6 +17,7 @@ const Movies = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const axiosPrivate = useAxiosPrivate();
+    const { isGolden, isEmerald } = useTheme();
 
     useEffect(() => {
         let isMounted = true;
@@ -213,7 +215,15 @@ const Movies = () => {
                     {totalItems > 1 && ( // Even if totalItems is 1, you might want to show the pagination with page 1 enabled
                         <div className="mt-6 flex items-center justify-center gap-4">
                             <button
-                                className={`p-2 text-gray-800 rounded-full hover:bg-gray-200 ${page === 1 && "cursor-not-allowed opacity-50"}`}
+                                className={`p-2 rounded-full transition-all duration-200 ${
+                                    page === 1 
+                                        ? "cursor-not-allowed opacity-50 text-gray-400" 
+                                        : isGolden 
+                                            ? "text-amber-700 hover:bg-amber-100" 
+                                            : isEmerald 
+                                                ? "text-emerald-700 hover:bg-emerald-100" 
+                                                : "text-gray-800 hover:bg-gray-200"
+                                }`}
                                 onClick={() => handlePageChange(page - 1)}
                                 disabled={page === 1}
                             >
@@ -225,7 +235,19 @@ const Movies = () => {
                                 {getPageNumbers().map((pageNumber) => (
                                     <button
                                         key={pageNumber}
-                                        className={`px-3 py-1 rounded-full text-sm font-semibold ${page === pageNumber ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-200"}`}
+                                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                                            page === pageNumber 
+                                                ? isGolden 
+                                                    ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg" 
+                                                    : isEmerald 
+                                                        ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg" 
+                                                        : "bg-blue-500 text-white shadow-lg"
+                                                : isGolden 
+                                                    ? "text-amber-700 hover:bg-amber-100" 
+                                                    : isEmerald 
+                                                        ? "text-emerald-700 hover:bg-emerald-100" 
+                                                        : "text-gray-700 hover:bg-gray-200"
+                                        }`}
                                         onClick={() => handlePageChange(pageNumber)}
                                         disabled={pageNumber > totalItems} // Disable if page number exceeds total pages
                                     >
@@ -235,7 +257,15 @@ const Movies = () => {
                             </div>
 
                             <button
-                                className={`p-2 text-gray-800 rounded-full hover:bg-gray-200 ${page === totalItems && "cursor-not-allowed opacity-50"}`}
+                                className={`p-2 rounded-full transition-all duration-200 ${
+                                    page === totalItems 
+                                        ? "cursor-not-allowed opacity-50 text-gray-400" 
+                                        : isGolden 
+                                            ? "text-amber-700 hover:bg-amber-100" 
+                                            : isEmerald 
+                                                ? "text-emerald-700 hover:bg-emerald-100" 
+                                                : "text-gray-800 hover:bg-gray-200"
+                                }`}
                                 onClick={() => handlePageChange(page + 1)}
                                 disabled={page === totalItems}
                             >
