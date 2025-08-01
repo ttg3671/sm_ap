@@ -657,7 +657,7 @@ const LoginPage = () => {
                   right: '16px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: 'rgba(255, 255, 255, 0.5)'
+                  color: currentColors.primary
                 }}
                 size={20}
               />
@@ -724,7 +724,7 @@ const LoginPage = () => {
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: 'rgba(255, 255, 255, 0.9)'
+                  color: currentColors.primary
                 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
