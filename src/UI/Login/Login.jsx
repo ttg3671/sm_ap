@@ -11,7 +11,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { switchTheme } = useTheme();
+  const { changeTheme } = useTheme();
   
   // Get state from Redux store with fallback
   const auth = useSelector((state) => state?.auth || {});
@@ -93,7 +93,7 @@ const LoginPage = () => {
           sessionStorage.setItem('userEmail', formData.email);
           
           // Save selected theme for dashboard
-          switchTheme(currentTheme);
+          changeTheme(currentTheme);
           sessionStorage.setItem('selectedTheme', currentTheme);
           localStorage.setItem('selectedTheme', currentTheme);
           
@@ -127,7 +127,7 @@ const LoginPage = () => {
           sessionStorage.setItem('userEmail', formData.email);
           
           // Save selected theme for dashboard
-          switchTheme(currentTheme);
+          changeTheme(currentTheme);
           sessionStorage.setItem('selectedTheme', currentTheme);
           localStorage.setItem('selectedTheme', currentTheme);
           
@@ -724,7 +724,7 @@ const LoginPage = () => {
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: 'rgba(255, 255, 255, 0.5)'
+                  color: 'rgba(255, 255, 255, 0.9)'
                 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}

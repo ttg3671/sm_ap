@@ -8,7 +8,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 
 const Navbar = ({ currentUser, logoutUser }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { tailwind } = useTheme();
+  const { isGolden, isEmerald } = useTheme();
 
   const toggleSidebar = () => {
     setSidebarOpen((prev) => !prev);
@@ -29,7 +29,7 @@ const Navbar = ({ currentUser, logoutUser }) => {
   return (
     <>
       {/* Top Navbar */}
-      <nav className={`bg-${tailwind.primary} text-white flex items-center justify-between px-6 py-4 fixed top-0 left-0 w-full z-50 shadow-md h-16`}>
+      <nav className={`${isGolden ? 'bg-amber-600' : 'bg-emerald-600'} text-white flex items-center justify-between px-6 py-4 fixed top-0 left-0 w-full z-50 shadow-md h-16`}>
         {/* Logo */}
         <div className="text-xl font-bold">
           <Link to="/home">Yenumax</Link>
