@@ -651,8 +651,7 @@ const LoginPage = () => {
                 style={{
                   position: 'absolute',
                   right: '12px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
+                  top: '12px',
                   color: currentColors.primary,
                   display: 'flex',
                   alignItems: 'center',
@@ -660,7 +659,7 @@ const LoginPage = () => {
                   width: '32px',
                   height: '32px'
                 }}
-                size={22}
+                size={20}
               />
             </motion.div>
           </motion.div>
@@ -716,8 +715,7 @@ const LoginPage = () => {
                 style={{
                   position: 'absolute',
                   right: '12px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
+                  top: '12px',
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
@@ -736,7 +734,7 @@ const LoginPage = () => {
                 }}
                 whileTap={{ scale: 0.9 }}
               >
-                {showPassword ? <AiOutlineEyeInvisible size={22} /> : <AiOutlineEye size={22} />}
+                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
               </motion.button>
             </motion.div>
           </motion.div>
