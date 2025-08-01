@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// We'll use the proxy setup for local development
+// We'll use the proxy/rewrite setup for both development and production
 const isDev = import.meta.env.DEV;
 
-// For development, use the proxy path; for production, use the full URL
-const BASE_URL = isDev ? '/api/v1' : (import.meta.env.VITE_BASE_URL || 'https://api.yenumax.com/api/v1');
+// Use relative paths for both dev and production to leverage Vite proxy and Vercel rewrites
+const BASE_URL = '/api/v1';
 const IMG_URL = import.meta.env.VITE_IMG_URL || 'https://yenumax.com/api/uploads/';
 
 // Standard axios instance
@@ -23,8 +23,8 @@ export const axiosPrivate = axios.create({
 
 // Export URLs for use in components
 export const API_URLS = {
-	BASE_URL: isDev ? '/api/v1' : (import.meta.env.VITE_BASE_URL || 'https://api.yenumax.com/api/v1'),
+	BASE_URL: '/api/v1',
 	IMG_URL,
-	SOCKET_URL: import.meta.env.VITE_SOCKET_URL || 'https://api.yenumax.com/',
+	SOCKET_URL: import.meta.env.VITE_SOCKET_URL || 'https://api.yenumax.com',
 	BASE_PATH: import.meta.env.VITE_BASE_PATH || '/'
 };

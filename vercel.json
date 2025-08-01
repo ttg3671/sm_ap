@@ -5,9 +5,9 @@
   "installCommand": "npm install",
   "framework": "vite",
   "env": {
-    "VITE_BASE_URL": "https://api.yenumax.com/",
+    "VITE_BASE_URL": "https://api.yenumax.com",
     "VITE_IMG_URL": "https://yenumax.com/api/uploads/",
-    "VITE_SOCKET_URL": "https://api.yenumax.com/",
+    "VITE_SOCKET_URL": "https://api.yenumax.com",
     "VITE_BASE_PATH": "/"
   },
   "rewrites": [

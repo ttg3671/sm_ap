@@ -54,10 +54,8 @@ const LoginPage = () => {
     dispatch(loginStart());
 
     try {
-      // In development, use relative URL for the proxy
-      // In production, use the full URL from environment variables
-      const isDev = import.meta.env.DEV;
-      const baseURL = isDev ? '/api/v1' : (import.meta.env.VITE_BASE_URL || 'https://api.yenumax.com/api/v1');
+      // Use relative URL to leverage Vercel rewrites in production and Vite proxy in development
+      const baseURL = '/api/v1';
 
       // Call actual API for authentication
       const response = await fetch(`${baseURL}/auth/admin/login`, {
