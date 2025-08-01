@@ -21,7 +21,7 @@ const Tags = () => {
 
     const getCategory = async () => {
       try {
-        const response = await axiosPrivate.get("/api/v1/admin/contents", {
+        const response = await axiosPrivate.get("/admin/tags", {
           signal: controller.signal,
         });
 
@@ -72,7 +72,7 @@ const Tags = () => {
     // console.log("Delete item", id);
     setId(id);
     try {
-      const response = await axiosPrivate.delete(`/api/v1/admin/contents/${id}`);
+      const response = await axiosPrivate.delete(`/admin/tags/${id}`);
 
       if (response.data?.isSuccess) {
         setListData((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
@@ -96,7 +96,7 @@ const Tags = () => {
     try {
       if (id) {
         // Edit existing tag
-        const response = await axiosPrivate.put(`/api/v1/admin/contents/${id}`, {
+        const response = await axiosPrivate.put(`/admin/tags/${id}`, {
           name: val,
         });
 
@@ -111,7 +111,7 @@ const Tags = () => {
         }
       } else {
         // Add new tag
-        const response = await axiosPrivate.post(`/api/v1/admin/contents`, {
+        const response = await axiosPrivate.post(`/admin/tags`, {
           name: val,
         });
 

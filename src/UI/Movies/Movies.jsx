@@ -26,7 +26,7 @@ const Movies = () => {
         const getSeries = async () => {
             try {
                 setIsLoading(true); // Set loading to true before each API call
-                const response = await axiosPrivate.get(`/api/v1/admin/movies?pgNo=${page}&page_items=${itemsPerPage}`, {
+                const response = await axiosPrivate.get(`/admin/movies?pgNo=${page}&page_items=${itemsPerPage}`, {
                     signal: controller.signal,
                 });
 
@@ -73,7 +73,7 @@ const Movies = () => {
         const getSeries = async () => {
             try {
                 setIsLoading(true); // Set loading to true before each API call
-                const response = await axiosPrivate.get("/api/v1/admin/contents", {
+                const response = await axiosPrivate.get("/admin/contents", {
                     signal: controller.signal,
                 });
 
@@ -152,13 +152,13 @@ const Movies = () => {
             
             // Check for the type and make appropriate delete request
             if (Number(type) === 1) {
-                response = await axiosPrivate.delete(`/api/v1/admin/web-series/${id}`);
+                response = await axiosPrivate.delete(`/admin/web-series/${id}`);
             }
             if (Number(type) === 2) {
-                response = await axiosPrivate.delete(`/api/v1/admin/movies/${id}`);
+                response = await axiosPrivate.delete(`/admin/movies/${id}`);
             }
             if (Number(type) === 3) {
-                response = await axiosPrivate.delete(`/api/v1/admin/episodes/${id}`);
+                response = await axiosPrivate.delete(`/admin/episodes/${id}`);
             }
 
             if (response?.data?.isSuccess) {

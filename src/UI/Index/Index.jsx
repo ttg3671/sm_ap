@@ -46,8 +46,8 @@ const Index = () => {
                 // Note: axiosPrivate already has the base URL set to /api/v1 in development
                 const apiCalls = [
                     axiosPrivate.get(`/admin/home?page=${page}&limit=6`),
-                    axiosPrivate.get(`/genre`),
-                    axiosPrivate.get(`/content`)
+                    axiosPrivate.get(`/admin/genres`),
+                    axiosPrivate.get(`/admin/contents`)
                 ];
                 
                 // Execute all requests in parallel

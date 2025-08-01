@@ -111,7 +111,7 @@ const Genre = () => {
         }
       } else {
         // Add new tag
-        const response = await axiosPrivate.post(`/api/v1/admin/genres`, {
+        const response = await axiosPrivate.post(`/admin/genres`, {
           name: val,
         });
 
