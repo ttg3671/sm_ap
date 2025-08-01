@@ -23,7 +23,20 @@ const LoadingComponent = () => (
   </div>
 );
 
-createRoot(document.getElementById('root')).render(
+// Get the root container
+const container = document.getElementById('root');
+
+// Check if root already exists, if not create one
+let root;
+if (!container._reactRoot) {
+  root = createRoot(container);
+  container._reactRoot = root;
+} else {
+  root = container._reactRoot;
+}
+
+// Render the app
+root.render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={<LoadingComponent />} persistor={persistor}>
@@ -34,5 +47,5 @@ createRoot(document.getElementById('root')).render(
         </ThemeProvider>
       </PersistGate>
     </Provider>
-  </StrictMode>,
+  </StrictMode>
 )
