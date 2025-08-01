@@ -28,7 +28,7 @@ const Trending = () => {
 
         const getTag = async () => {
             try {
-                const response = await axiosPrivate.get("/api/v1/admin/contents", {
+                const response = await axiosPrivate.get("/admin/contents", {
                     signal: controller.signal,
                 });
 
@@ -71,7 +71,7 @@ const Trending = () => {
         // console.log('Delete item with ID:', id, type, sliderList);
 
         try {
-            const response = await axiosPrivate.delete(`/api/v1/admin/trailer-to-content-type/${id}/${type}`);
+            const response = await axiosPrivate.delete(`/admin/trailer-to-content-type/${id}/${type}`);
 
             if (response.data?.isSuccess) {
                 setSliderList((prev) =>
@@ -114,7 +114,7 @@ const Trending = () => {
 
         const getTag = async () => {
             try {
-                const response = await axiosPrivate.get(`/api/v1/admin/trailer-by-content-type/${tagID}?pgNo=${page}&page_items=${itemsPerPage}`, {
+                const response = await axiosPrivate.get(`/admin/trailer-by-content-type/${tagID}?pgNo=${page}&page_items=${itemsPerPage}`, {
                     signal: controller.signal,
                 });
 

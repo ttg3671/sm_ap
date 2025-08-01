@@ -35,9 +35,9 @@ const Content = () => {
 
         const fetchData = async () => {
             const endpoints = [
-                axiosPrivate.get("/api/v1/admin/genres", { signal: controller.signal }),
-                axiosPrivate.get("/api/v1/admin/categories", { signal: controller.signal }),
-                axiosPrivate.get("/api/v1/admin/age", { signal: controller.signal }),
+                axiosPrivate.get("/admin/genres", { signal: controller.signal }),
+                axiosPrivate.get("/admin/categories", { signal: controller.signal }),
+                axiosPrivate.get("/admin/age", { signal: controller.signal }),
             ];
 
             const results = await Promise.allSettled(endpoints);
@@ -94,7 +94,7 @@ const Content = () => {
                 // console.log("Uploading category...");
                 setIsLoading(true);
 
-                const response = await axiosPrivate.post(`/api/v1/admin/web-series`, {
+                const response = await axiosPrivate.post(`/admin/web-series`, {
                     title: formData?.title,
                     title_image: formData?.title_image,
                     poster_image: formData?.poster_image,
@@ -120,7 +120,7 @@ const Content = () => {
                 // console.log("Uploading movie...");
                 setIsLoading(true);
 
-                const response = await axiosPrivate.post(`/api/v1/admin/movies`, {
+                const response = await axiosPrivate.post(`/admin/movies`, {
                     title: formData?.title,
                     title_image: formData?.title_image,
                     poster_image: formData?.poster_image,
@@ -147,7 +147,7 @@ const Content = () => {
                 // console.log("Uploading episode...");
                 setIsLoading(true);
 
-                const response = await axiosPrivate.post(`/api/v1/admin/episodes`, {
+                const response = await axiosPrivate.post(`/admin/episodes`, {
                     title: formData?.title,
                     title_image: formData?.title_image,
                     poster_image: formData?.poster_image,

@@ -25,7 +25,7 @@ const Season = () => {
 
 	    const getCategory = async () => {
 	      try {
-	        const response = await axiosPrivate.get(`/api/v1/admin/web-series/${series_id}/seasons`, {
+	        const response = await axiosPrivate.get(`/admin/web-series/${series_id}/seasons`, {
 	          signal: controller.signal,
 	        });
 
@@ -77,7 +77,7 @@ const Season = () => {
 	    setId(id);
 	    setIsLoading(true);
 	    try {
-	      const response = await axiosPrivate.delete(`/api/v1/admin/season/${id}`);
+	      const response = await axiosPrivate.delete(`/admin/season/${id}`);
 
 	      if (response.data?.isSuccess) {
 	        setListData((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
@@ -104,7 +104,7 @@ const Season = () => {
   		try {
 	      if (id) {
 	        // Edit existing tag
-	        const response = await axiosPrivate.put(`/api/v1/admin/season/${id}`, {
+	        const response = await axiosPrivate.put(`/admin/season/${id}`, {
 	          series_id: series_id,
       		  season_number: sno
 	        });
@@ -121,7 +121,7 @@ const Season = () => {
 	        }
 	      } else {
 	        // Add new tag
-	        const response = await axiosPrivate.post(`/api/v1/admin/season`, {
+	        const response = await axiosPrivate.post(`/admin/season`, {
 	          series_id: series_id,
       		  season_number: sno
 	        });

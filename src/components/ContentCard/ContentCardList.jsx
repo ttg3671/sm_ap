@@ -52,7 +52,7 @@ const ContentCardList = ({ type = "", contentList = {}, tagList = [], season = "
       // console.log(id, selectedTags);
 
       // Send request to add content to trending
-      const response = await axiosPrivate.put(`/api/v1/admin/trailer-to-content-type/${id}`, {
+      const response = await axiosPrivate.put(`/admin/trailer-to-content-type/${id}`, {
         content_id: selectedTags,
         type: cat
       });
@@ -76,7 +76,7 @@ const ContentCardList = ({ type = "", contentList = {}, tagList = [], season = "
     // });
 
     try{
-      const response = await axiosPrivate.post("/api/v1/admin/slider", {
+      const response = await axiosPrivate.post("/admin/slider", {
         video_id: id,
         position, 
         type: contentList?.category_id

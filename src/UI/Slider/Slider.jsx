@@ -21,7 +21,7 @@ const Slider = () => {
 
         const getCategory = async () => {
             try {
-                const response = await axiosPrivate.get("/api/v1/admin/slider", {
+                const response = await axiosPrivate.get("/admin/slider", {
                     signal: controller.signal,
                 });
 
@@ -61,7 +61,7 @@ const Slider = () => {
     const handleDelete = async (id) => {
         // console.log('Delete item with ID:', id, type);
         try {
-            const response = await axiosPrivate.delete(`/api/v1/admin/slider/${id}`);
+            const response = await axiosPrivate.delete(`/admin/slider/${id}`);
 
             if (response.data?.isSuccess) {
                 setSliderList((prev) =>
@@ -93,7 +93,7 @@ const Slider = () => {
     const handleUpdate = async (slider_id, id, type, position) => {
         // console.log('Update item:', id, type, position);
         try {
-            const response = await axiosPrivate.put(`/api/v1/admin/slider/${slider_id}`, {
+            const response = await axiosPrivate.put(`/admin/slider/${slider_id}`, {
                 video_id: id, type, position
             });
 

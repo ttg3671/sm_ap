@@ -19,7 +19,7 @@ const WatchAge = () => {
 
     const getCategory = async () => {
       try {
-        const response = await axiosPrivate.get("/api/v1/admin/age", {
+        const response = await axiosPrivate.get("/admin/age", {
           signal: controller.signal,
         });
 
@@ -70,7 +70,7 @@ const WatchAge = () => {
     // console.log("Delete item", id);
     setId(id);
     try {
-      const response = await axiosPrivate.delete(`/api/v1/admin/age/${id}`);
+      const response = await axiosPrivate.delete(`/admin/age/${id}`);
 
       if (response.data?.isSuccess) {
         setListData((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
@@ -94,7 +94,7 @@ const WatchAge = () => {
     try {
       if (id) {
         // Edit existing tag
-        const response = await axiosPrivate.put(`/api/v1/admin/age/${id}`, {
+        const response = await axiosPrivate.put(`/admin/age/${id}`, {
           name: val,
         });
 
@@ -109,7 +109,7 @@ const WatchAge = () => {
         }
       } else {
         // Add new tag
-        const response = await axiosPrivate.post(`/api/v1/admin/age`, {
+        const response = await axiosPrivate.post(`/admin/age`, {
           name: val,
         });
 

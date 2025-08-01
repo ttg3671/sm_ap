@@ -31,7 +31,7 @@ const UploadTrailer = () => {
 
 	  const fetchTrailer = async () => {
 	    try {
-	      const response = await axiosPrivate.get(`/api/v1/admin/link/${v_id}/${v_type}/1`);
+	      const response = await axiosPrivate.get(`/admin/link/${v_id}/${v_type}/1`);
 	      if (response.data?.isSuccess) {
 	      	console.log(!response.data?.data);
 	        
@@ -60,7 +60,7 @@ const UploadTrailer = () => {
     	setIsLoading(true);
     	const vimeoLink = link ? link.split("https://vimeo.com/")[1] : "";
 
-    	const response = await axiosPrivate.post("/api/v1/admin/trailer", {
+    	const response = await axiosPrivate.post("/admin/trailer", {
     		video_id: Number(id), 
     		type: Number(type), 
     		video: vimeoLink, 
@@ -82,7 +82,7 @@ const UploadTrailer = () => {
     const onVideoRemoved = async (id, type) => {
     	// console.log(id, type);
 
-    	const response = await axiosPrivate.delete(`/api/v1/admin/trailer/${id}/${type}`);
+    	const response = await axiosPrivate.delete(`/admin/trailer/${id}/${type}`);
 
     	if (!response.data?.isSuccess) {
 	      setErrMsg(response.data?.message || "Failed to delete trailer. Try again...");

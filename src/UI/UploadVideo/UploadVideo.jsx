@@ -33,7 +33,7 @@ const UploadVideo = () => {
 
 	  const fetchTrailer = async () => {
 	    try {
-	      const response = await axiosPrivate.get(`/api/v1/admin/link/${v_id}/${v_type}/2`);
+	      const response = await axiosPrivate.get(`/admin/link/${v_id}/${v_type}/2`);
 	      if (response.data?.isSuccess && response.data?.data) {
 	      	// console.log(response.data?.data);
 	        setInitialData(response.data?.data);
@@ -56,7 +56,7 @@ const UploadVideo = () => {
     	setIsLoading(true);
     	const vimeoLink = link ? link.split("https://vimeo.com/")[1] : "";
 
-    	const response = await axiosPrivate.post("/api/v1/admin/video", {
+    	const response = await axiosPrivate.post("/admin/video", {
     		video_id: Number(id), 
     		type: Number(type), 
     		video: vimeoLink, 
@@ -78,7 +78,7 @@ const UploadVideo = () => {
     const onVideoRemoved = async (id, type) => {
     	// console.log(id, type);
 
-    	const response = await axiosPrivate.delete(`/api/v1/admin/video/${id}/${type}`);
+    	const response = await axiosPrivate.delete(`/admin/video/${id}/${type}`);
 
     	if (!response.data?.isSuccess) {
 	      setErrMsg(response.data?.message || "Failed to delete video. Try again...");

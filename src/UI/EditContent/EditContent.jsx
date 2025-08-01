@@ -43,9 +43,9 @@ const EditContent = () => {
 
     const fetchData = async () => {
       const endpoints = [
-        axiosPrivate.get("/api/v1/admin/genres", { signal: controller.signal }),
-        axiosPrivate.get("/api/v1/admin/categories", { signal: controller.signal }),
-        axiosPrivate.get("/api/v1/admin/age", { signal: controller.signal }),
+        axiosPrivate.get("/admin/genres", { signal: controller.signal }),
+        axiosPrivate.get("/admin/categories", { signal: controller.signal }),
+        axiosPrivate.get("/admin/age", { signal: controller.signal }),
       ];
 
       const results = await Promise.allSettled(endpoints);
@@ -90,19 +90,19 @@ const EditContent = () => {
     const fetchContentData = async () => {
       try {
         if (type.toString() === "1") {
-          const response = await axiosPrivate.get(`/api/v1/admin/web-series/${id}`); // Replace with your API
+          const response = await axiosPrivate.get(`/admin/web-series/${id}`); // Replace with your API
           setContentData(response.data?.data);  // Set the fetched content data
           // console.log(response.data?.data);
         }
 
         else if (type.toString() === "2") {
-          const response = await axiosPrivate.get(`/api/v1/admin/movies/${id}`); // Replace with your API
+          const response = await axiosPrivate.get(`/admin/movies/${id}`); // Replace with your API
           setContentData(response.data?.data);  // Set the fetched content data
           // console.log(response.data?.data);
         }
 
         else if (type.toString() === "3") {
-          const response = await axiosPrivate.get(`/api/v1/admin/episodes/${id}`); // Replace with your API
+          const response = await axiosPrivate.get(`/admin/episodes/${id}`); // Replace with your API
           setContentData(response.data?.data);  // Set the fetched content data
           // console.log(response.data?.data);
         }
@@ -137,7 +137,7 @@ const EditContent = () => {
             // console.log("Uploading category...");
             setLoading(true);
 
-            const response = await axiosPrivate.put(`/api/v1/admin/web-series/${updatedData?.id}`, {
+            const response = await axiosPrivate.put(`/admin/web-series/${updatedData?.id}`, {
                 title: updatedData?.title,
                 title_image: updatedData?.title_image,
                 poster_image: updatedData?.poster_image,
@@ -163,7 +163,7 @@ const EditContent = () => {
             // console.log("Uploading movie...");
             setLoading(true);
 
-            const response = await axiosPrivate.put(`/api/v1/admin/movies/${updatedData?.id}`, {
+            const response = await axiosPrivate.put(`/admin/movies/${updatedData?.id}`, {
                 title: updatedData?.title,
                 title_image: updatedData?.title_image,
                 poster_image: updatedData?.poster_image,
@@ -190,7 +190,7 @@ const EditContent = () => {
             // console.log("Uploading episode...");
             setLoading(true);
 
-            const response = await axiosPrivate.put(`/api/v1/admin/episodes/${updatedData?.id}`, {
+            const response = await axiosPrivate.put(`/admin/episodes/${updatedData?.id}`, {
                 title: updatedData?.title,
                 title_image: updatedData?.title_image,
                 poster_image: updatedData?.poster_image,

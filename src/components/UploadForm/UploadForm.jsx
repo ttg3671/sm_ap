@@ -73,7 +73,7 @@ const UploadForm = ({ id = "", type = "", onSubmit, initialData = null, onVideoR
       setUploading(true);
       setErrMsg("");
 
-      const response = await axiosPrivate.post("/api/v1/admin/vimeo/upload-ticket", {
+      const response = await axiosPrivate.post("/admin/vimeo/upload-ticket", {
         fileSize: videoFile.size,
         fileName: videoFile.name,
       });

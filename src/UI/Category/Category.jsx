@@ -19,7 +19,7 @@ const Category = () => {
 
     const getCategory = async () => {
       try {
-        const response = await axiosPrivate.get("/api/v1/admin/categories", {
+        const response = await axiosPrivate.get("/admin/categories", {
           signal: controller.signal,
         });
 
