@@ -1,54 +1,130 @@
-import { Fragment, useState } from 'react';
-import { useNavigate, useLocation, Routes, Route } from 'react-router-dom';
-
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { 
-  Login,
+  Login, 
+  Index, 
+  Users, 
+  Genre, 
+  Tags, 
+  WatchAge, 
+  Slider, 
+  WebSeries, 
+  Movies, 
+  Content, 
+  Trending,
   Category,
-  Genre,
-  WatchAge,
-  Tags,
-  Content,
-  WebSeries,
-	Movies,
-  Slider,
-  Season,
   Episodes,
-  Home,
+  Season,
   EditContent,
   UploadVideo,
-  UploadTrailer,
-  Trending,
-  Index,
-  Users
+  UploadTrailer
 } from "./UI";
-
-import { ContentCardList } from "./components";
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 function App() {
   return (
-    <Fragment>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/index" element={<Home />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/home" element={<Index />} />
-        <Route path="/categories" element={<Category />} />
-        <Route path="/genres" element={<Genre />} />
-        <Route path="/age" element={<WatchAge />} />
-        <Route path="/tags" element={<Tags />} />
-        <Route path="/trending" element={<Trending />} />
-        <Route path="/contents" element={<Content />} />
-        <Route path="/webseries" element={<WebSeries />} />
-        <Route path="/movies" element={<Movies />} />
-        <Route path="/slider" element={<Slider />} />
-        <Route path="/season/:series_id" element={<Season />} />
-        <Route path="/episodes" element={<Episodes />} />
-        <Route path="/edit/:id/:type" element={<EditContent />} />
-        <Route path="/trailers/:id/:type" element={<UploadTrailer />} />
-        <Route path="/videos/:id/:type" element={<UploadVideo />} />
-      </Routes>
-    </Fragment>
-  )
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/index" element={
+        <ProtectedRoute>
+          <Index />
+        </ProtectedRoute>
+      } />
+      <Route path="/home" element={
+        <ProtectedRoute>
+          <Index />
+        </ProtectedRoute>
+      } />
+      <Route path="/users" element={
+        <ProtectedRoute>
+          <Users />
+        </ProtectedRoute>
+      } />
+      <Route path="/genres" element={
+        <ProtectedRoute>
+          <Genre />
+        </ProtectedRoute>
+      } />
+      <Route path="/tags" element={
+        <ProtectedRoute>
+          <Tags />
+        </ProtectedRoute>
+      } />
+      <Route path="/age" element={
+        <ProtectedRoute>
+          <WatchAge />
+        </ProtectedRoute>
+      } />
+      <Route path="/slider" element={
+        <ProtectedRoute>
+          <Slider />
+        </ProtectedRoute>
+      } />
+      <Route path="/webseries" element={
+        <ProtectedRoute>
+          <WebSeries />
+        </ProtectedRoute>
+      } />
+      <Route path="/movies" element={
+        <ProtectedRoute>
+          <Movies />
+        </ProtectedRoute>
+      } />
+      <Route path="/contents" element={
+        <ProtectedRoute>
+          <Content />
+        </ProtectedRoute>
+      } />
+      <Route path="/trending" element={
+        <ProtectedRoute>
+          <Trending />
+        </ProtectedRoute>
+      } />
+      <Route path="/category" element={
+        <ProtectedRoute>
+          <Category />
+        </ProtectedRoute>
+      } />
+      <Route path="/episodes" element={
+        <ProtectedRoute>
+          <Episodes />
+        </ProtectedRoute>
+      } />
+      <Route path="/season" element={
+        <ProtectedRoute>
+          <Season />
+        </ProtectedRoute>
+      } />
+      <Route path="/edit-content" element={
+        <ProtectedRoute>
+          <EditContent />
+        </ProtectedRoute>
+      } />
+      <Route path="/upload-video" element={
+        <ProtectedRoute>
+          <UploadVideo />
+        </ProtectedRoute>
+      } />
+      <Route path="/upload-trailer" element={
+        <ProtectedRoute>
+          <UploadTrailer />
+        </ProtectedRoute>
+      } />
+      <Route path="*" element={
+        <div style={{
+          color: 'white', 
+          fontSize: '24px', 
+          textAlign: 'center', 
+          marginTop: '50px',
+          background: '#1a1a1a',
+          minHeight: '100vh',
+          padding: '20px'
+        }}>
+          Page Not Found - Go back to <a href="/" style={{color: '#FFD700'}}>Login</a>
+        </div>
+      } />
+    </Routes>
+  );
 }
 
-export default App
+export default App;

@@ -19,7 +19,7 @@ const Genre = () => {
 
     const getCategory = async () => {
       try {
-        const response = await axiosPrivate.get("/api/v1/admin/genres", {
+        const response = await axiosPrivate.get("/admin/genres", {
           signal: controller.signal,
         });
 
@@ -70,7 +70,7 @@ const Genre = () => {
     // console.log("Delete item", id);
     setId(id);
     try {
-      const response = await axiosPrivate.delete(`/api/v1/admin/genres/${id}`);
+      const response = await axiosPrivate.delete(`/admin/genres/${id}`);
 
       if (response.data?.isSuccess) {
         setListData((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
@@ -94,7 +94,7 @@ const Genre = () => {
     try {
       if (id) {
         // Edit existing tag
-        const response = await axiosPrivate.put(`/api/v1/admin/genres/${id}`, {
+        const response = await axiosPrivate.put(`/admin/genres/${id}`, {
           name: val,
         });
 

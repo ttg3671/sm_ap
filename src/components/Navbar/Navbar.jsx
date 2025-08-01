@@ -47,16 +47,16 @@ const Navbar = ({ currentUser, logoutUser }) => {
       >
         {/* Nav Links */}
         <ul className="p-4 space-y-4 text-white">
-          <li><a href="/home" className="text-lg hover:text-black font-bold hover:text-xl">Home</a></li>
-          <li><a href="/users" className="text-lg hover:text-black font-bold hover:text-xl">Users</a></li>
-          <li><a href="/genres" className="text-lg hover:text-black font-bold hover:text-xl">Genre</a></li>
-          <li><a href="/tags" className="text-lg hover:text-black font-bold hover:text-xl">Tags</a></li>
-          <li><a href="/age" className="text-lg hover:text-black font-bold hover:text-xl">Watch-age</a></li>
-          <li><a href="/slider" className="text-lg hover:text-black font-bold hover:text-xl">Slider</a></li>
-          <li><a href="/webseries" className="text-lg hover:text-black font-bold hover:text-xl">Webseries</a></li>
-          <li><a href="/movies" className="text-lg hover:text-black font-bold hover:text-xl">Movies</a></li>
-          <li><a href="/contents" className="text-lg hover:text-black font-bold hover:text-xl">Upload Content</a></li>
-          <li><a href="/trending" className="text-lg hover:text-black font-bold hover:text-xl">Trending</a></li>
+          <li><Link to="/home" className="text-lg hover:text-black font-bold hover:text-xl">Home</Link></li>
+          <li><Link to="/users" className="text-lg hover:text-black font-bold hover:text-xl">Users</Link></li>
+          <li><Link to="/genres" className="text-lg hover:text-black font-bold hover:text-xl">Genre</Link></li>
+          <li><Link to="/tags" className="text-lg hover:text-black font-bold hover:text-xl">Tags</Link></li>
+          <li><Link to="/age" className="text-lg hover:text-black font-bold hover:text-xl">Watch-age</Link></li>
+          <li><Link to="/slider" className="text-lg hover:text-black font-bold hover:text-xl">Slider</Link></li>
+          <li><Link to="/webseries" className="text-lg hover:text-black font-bold hover:text-xl">Webseries</Link></li>
+          <li><Link to="/movies" className="text-lg hover:text-black font-bold hover:text-xl">Movies</Link></li>
+          <li><Link to="/contents" className="text-lg hover:text-black font-bold hover:text-xl">Upload Content</Link></li>
+          <li><Link to="/trending" className="text-lg hover:text-black font-bold hover:text-xl">Trending</Link></li>
           <li><a onClick={handleLogout} className="cursor-pointer text-lg hover:text-black font-bold hover:text-xl">Logout</a></li>
         </ul>
       </div>

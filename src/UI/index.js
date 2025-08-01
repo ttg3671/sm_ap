@@ -1,4 +1,4 @@
-import Login from "./Login/Login";
+import { Login } from "./Login/Login";
 import Category from "./Category/Category";
 import Genre from "./Genre/Genre";
 import WatchAge from "./WatchAge/WatchAge";

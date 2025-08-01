@@ -25,7 +25,7 @@ const Users = () => {
 
     const getUsers = async () => {
       try {
-        const response = await axiosPrivate.get(`/api/v1/admin/users?pgNo=${page}&page_items=${itemsPerPage}`, {
+        const response = await axiosPrivate.get(`/admin/users?pgNo=${page}&page_items=${itemsPerPage}`, {
           signal: controller.signal,
         });
 
