@@ -55,8 +55,48 @@ const LoginPage = () => {
     e.preventDefault();
     dispatch(loginStart());
 
+    // For demo/development mode, prioritize demo login to avoid API errors
+    const isDemoMode = false; // Set to false when backend is ready
+    
+    if (isDemoMode) {
+      // Demo mode - validate credentials without API call
+      if (formData.email === 'admin@yenumax.com' && formData.password === 'maxYenu@1847') {
+        console.info('Demo mode: Using local authentication');
+        
+        const userData = { 
+          name: "YenuMax Admin", 
+          email: formData.email,
+          role: "administrator",
+          loginTime: new Date().toISOString()
+        };
+        
+        // Generate a demo token
+        const demoToken = btoa(`${formData.email}:${new Date().getTime()}`);
+        
+        dispatch(loginSuccess({ 
+          user: userData, 
+          token: demoToken
+        }));
+        
+        sessionStorage.setItem('authToken', demoToken);
+        sessionStorage.setItem('userEmail', formData.email);
+        
+        // Save selected theme for dashboard
+        changeTheme(currentTheme);
+        sessionStorage.setItem('selectedTheme', currentTheme);
+        localStorage.setItem('selectedTheme', currentTheme);
+        
+        window.dispatchEvent(new Event('sessionStorageChange'));
+        navigate('/index');
+        return;
+      } else {
+        dispatch(loginFailure('Demo credentials: admin@yenumax.com / maxYenu@1847'));
+        return;
+      }
+    }
+
     try {
-      // Use relative URL to leverage Vercel rewrites in production and Vite proxy in development
+      // Production mode - try API first
       const baseURL = '/api/v1';
 
       // Call actual API for authentication
@@ -82,31 +122,27 @@ const LoginPage = () => {
             loginTime: new Date().toISOString()
           };
           
-          // Use Redux auth slice
           dispatch(loginSuccess({ 
             user: userData, 
             token: result.token 
           }));
           
-          // Store token for API calls
           sessionStorage.setItem('authToken', result.token);
           sessionStorage.setItem('userEmail', formData.email);
           
-          // Save selected theme for dashboard
           changeTheme(currentTheme);
           sessionStorage.setItem('selectedTheme', currentTheme);
           localStorage.setItem('selectedTheme', currentTheme);
           
           window.dispatchEvent(new Event('sessionStorageChange'));
-          
           navigate('/index');
         } else {
           dispatch(loginFailure(result.message || 'Login failed'));
         }
       } else {
-        // For demo purposes, allow a fallback login if the API is not available
+        // API returned error - fallback to demo if credentials match
         if (formData.email === 'admin@yenumax.com' && formData.password === 'maxYenu@1847') {
-          console.warn('Using demo login because API is not available');
+          console.warn('API unavailable, using demo login');
           
           const userData = { 
             name: "YenuMax Admin", 
@@ -115,7 +151,6 @@ const LoginPage = () => {
             loginTime: new Date().toISOString()
           };
           
-          // Generate a more realistic token for development
           const demoToken = btoa(`${formData.email}:${new Date().getTime()}`);
           
           dispatch(loginSuccess({ 
@@ -126,7 +161,6 @@ const LoginPage = () => {
           sessionStorage.setItem('authToken', demoToken);
           sessionStorage.setItem('userEmail', formData.email);
           
-          // Save selected theme for dashboard
           changeTheme(currentTheme);
           sessionStorage.setItem('selectedTheme', currentTheme);
           localStorage.setItem('selectedTheme', currentTheme);
@@ -137,14 +171,14 @@ const LoginPage = () => {
         }
         
         const errorData = await response.json().catch(() => ({}));
-        dispatch(loginFailure(errorData.message || 'Invalid credentials or server error'));
+        dispatch(loginFailure(errorData.message || 'Server error. Use demo: admin@yenumax.com / maxYenu@1847'));
       }
     } catch (error) {
       console.error("Login error:", error);
       
-      // Fallback login for demo/development when API is unreachable
+      // Network error - fallback to demo if credentials match
       if (formData.email === 'admin@yenumax.com' && formData.password === 'maxYenu@1847') {
-        console.warn('Using demo login because API is not reachable');
+        console.warn('Network error, using demo login');
         
         const userData = { 
           name: "YenuMax Admin", 
@@ -153,7 +187,6 @@ const LoginPage = () => {
           loginTime: new Date().toISOString()
         };
         
-        // Generate a more realistic token for development
         const demoToken = btoa(`${formData.email}:${new Date().getTime()}`);
         
         dispatch(loginSuccess({ 
@@ -163,12 +196,17 @@ const LoginPage = () => {
         
         sessionStorage.setItem('authToken', demoToken);
         sessionStorage.setItem('userEmail', formData.email);
+        
+        changeTheme(currentTheme);
+        sessionStorage.setItem('selectedTheme', currentTheme);
+        localStorage.setItem('selectedTheme', currentTheme);
+        
         window.dispatchEvent(new Event('sessionStorageChange'));
         navigate('/index');
       } else if (!formData.email || !formData.password) {
         dispatch(loginFailure('Please fill in all fields'));
       } else {
-        dispatch(loginFailure('Invalid email or password. Use: admin@yenumax.com / maxYenu@1847'));
+        dispatch(loginFailure('Connection error. Use demo: admin@yenumax.com / maxYenu@1847'));
       }
     }
     
