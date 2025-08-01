@@ -25,6 +25,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/demo" element={<Index />} />
       <Route path="/index" element={
         <ProtectedRoute>
           <Index />
