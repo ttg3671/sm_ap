@@ -29,7 +29,7 @@ const Navbar = ({ currentUser, logoutUser }) => {
   return (
     <>
       {/* Top Navbar */}
-      <nav className={`${isGolden ? 'bg-amber-600' : 'bg-emerald-600'} text-white flex items-center justify-between px-6 py-4 fixed top-0 left-0 w-full z-50 shadow-md h-16`}>
+      <nav className={`${isGolden ? 'bg-gradient-to-r from-amber-700 to-yellow-700 shadow-lg shadow-amber-200' : 'bg-gradient-to-r from-emerald-700 to-teal-700 shadow-lg shadow-emerald-200'} text-white flex items-center justify-between px-6 py-4 fixed top-0 left-0 w-full z-50 h-16 backdrop-blur-sm`}>
         {/* Logo */}
         <div className="text-xl font-bold">
           <Link to="/home">Yenumax</Link>

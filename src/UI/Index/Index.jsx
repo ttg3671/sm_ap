@@ -248,13 +248,13 @@ const Index = () => {
 				<Navbar />
 
 				<motion.div 
-					className={`col-span-full flex flex-col items-center justify-start pt-24 px-4 w-full min-h-screen bg-gradient-to-br from-gray-50 via-white ${isGolden ? 'to-amber-50' : 'to-emerald-50'}`}
+					className={`col-span-full flex flex-col items-center justify-start pt-24 px-4 w-full min-h-screen ${isGolden ? 'bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50' : 'bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50'}`}
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.6 }}
 				>
 		          	<motion.h1 
-		          		className={`text-4xl font-bold mb-8 bg-gradient-to-r ${isGolden ? 'from-amber-600 to-yellow-500' : 'from-emerald-600 to-teal-500'} bg-clip-text text-transparent tracking-wide`}
+		          		className={`text-4xl font-bold mb-8 bg-gradient-to-r ${isGolden ? 'from-amber-700 via-yellow-600 to-orange-600' : 'from-emerald-700 via-teal-600 to-green-600'} bg-clip-text text-transparent tracking-wide`}
 		          		initial={{ opacity: 0, y: -20 }}
 		          		animate={{ opacity: 1, y: 0 }}
 		          		transition={{ duration: 0.6, delay: 0.2 }}
@@ -277,7 +277,7 @@ const Index = () => {
 		          	)}
 
 			        <motion.div 
-		        		className="w-full max-w-6xl overflow-hidden bg-white/80 backdrop-blur-lg shadow-xl rounded-2xl border border-gray-100"
+		        		className={`w-full max-w-6xl overflow-hidden ${isGolden ? 'bg-gradient-to-br from-white via-amber-50 to-yellow-50 border-amber-200 shadow-amber-100' : 'bg-gradient-to-br from-white via-emerald-50 to-teal-50 border-emerald-200 shadow-emerald-100'} backdrop-blur-lg shadow-2xl rounded-2xl border-2`}
 		        		initial={{ opacity: 0, scale: 0.95 }}
 		        		animate={{ opacity: 1, scale: 1 }}
 		        		transition={{ duration: 0.6, delay: 0.3 }}
@@ -290,7 +290,7 @@ const Index = () => {
 		        				animate={{ opacity: 1, x: 0 }}
 		        				transition={{ duration: 0.5, delay: 0.4 }}
 		        			>
-		        				<div className={`p-2 bg-gradient-to-r ${isGolden ? 'from-amber-600 to-yellow-500' : 'from-emerald-600 to-teal-500'} rounded-lg`}>
+		        				<div className={`p-2 bg-gradient-to-r ${isGolden ? 'from-amber-700 to-yellow-600 shadow-amber-200' : 'from-emerald-700 to-teal-600 shadow-emerald-200'} rounded-lg shadow-lg`}>
 		        					<MdDashboard className="text-white" size={24} />
 		        				</div>
 		        				<h2 className="text-2xl font-bold text-gray-800">Current Content</h2>
@@ -298,18 +298,18 @@ const Index = () => {
 
 			            	{isLoading ? (
 			            		<motion.div 
-			            			className={`relative z-10 flex flex-col justify-center items-center h-64 bg-gradient-to-br ${isGolden ? 'from-amber-50 to-yellow-100' : 'from-emerald-50 to-teal-100'} rounded-xl`}
+			            			className={`relative z-10 flex flex-col justify-center items-center h-64 bg-gradient-to-br ${isGolden ? 'from-amber-100 via-yellow-50 to-orange-100 border border-amber-200' : 'from-emerald-100 via-teal-50 to-green-100 border border-emerald-200'} rounded-xl shadow-lg`}
 			            			initial={{ opacity: 0 }}
 			            			animate={{ opacity: 1 }}
 			            			transition={{ duration: 0.3 }}
 			            		>
 			            			<motion.div 
-			            				className={`w-16 h-16 border-4 ${isGolden ? 'border-yellow-200 border-t-amber-600' : 'border-teal-200 border-t-emerald-600'} rounded-full`}
+			            				className={`w-16 h-16 border-4 ${isGolden ? 'border-amber-300 border-t-amber-700' : 'border-emerald-300 border-t-emerald-700'} rounded-full animate-spin`}
 			            				animate={{ rotate: 360 }}
 			            				transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
 			            			/>
 			            			<motion.p 
-			            				className={`mt-4 ${isGolden ? 'text-amber-600' : 'text-emerald-600'} font-medium`}
+			            				className={`mt-4 ${isGolden ? 'text-amber-700' : 'text-emerald-700'} font-semibold text-lg`}
 			            				initial={{ opacity: 0 }}
 			            				animate={{ opacity: 1 }}
 			            				transition={{ delay: 0.2 }}
@@ -339,7 +339,7 @@ const Index = () => {
 		        		</div>
 
 		        		{/* Add More Section */}
-		        		<div className={`border-t border-gray-200 bg-gradient-to-r ${isGolden ? 'from-gray-50 to-amber-50' : 'from-gray-50 to-emerald-50'} p-8`}>
+		        		<div className={`border-t ${isGolden ? 'border-amber-200 bg-gradient-to-r from-amber-50 to-yellow-50' : 'border-emerald-200 bg-gradient-to-r from-emerald-50 to-teal-50'} p-8 shadow-inner`}>
 		        			<motion.div 
 		        				className="flex items-center justify-center gap-3 mb-6"
 		        				initial={{ opacity: 0, y: 20 }}
@@ -360,7 +360,7 @@ const Index = () => {
 		        				transition={{ duration: 0.5, delay: 0.7 }}
 		        			>
 		        				<div className="flex items-center gap-2 mb-4">
-		        					<MdMovie className={`${isGolden ? 'text-amber-600' : 'text-emerald-600'}`} size={20} />
+		        					<MdMovie className={`${isGolden ? 'text-amber-700' : 'text-emerald-700'}`} size={24} />
 		        					<h4 className="text-lg font-semibold text-gray-700">Movies & Series</h4>
 		        				</div>
 			            		{isLoading ? (
@@ -370,7 +370,7 @@ const Index = () => {
 			            				animate={{ opacity: 1 }}
 			            			>
 			            				<motion.div 
-			            					className={`w-8 h-8 border-2 ${isGolden ? 'border-yellow-200 border-t-amber-600' : 'border-teal-200 border-t-emerald-600'} rounded-full`}
+			            					className={`w-8 h-8 border-2 ${isGolden ? 'border-amber-300 border-t-amber-700' : 'border-emerald-300 border-t-emerald-700'} rounded-full animate-spin`}
 			            					animate={{ rotate: 360 }}
 			            					transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
 			            				/>
@@ -440,7 +440,7 @@ const Index = () => {
 			            	>
 		                        <div className="flex items-center justify-center gap-4">
 		                            <motion.button
-		                                className={`p-3 text-gray-800 rounded-full transition-all duration-200 ${page === 1 ? "cursor-not-allowed opacity-50" : `${isGolden ? 'hover:bg-amber-50 hover:text-amber-600' : 'hover:bg-emerald-50 hover:text-emerald-600'}`}`}
+		                                className={`p-3 text-gray-700 rounded-full transition-all duration-300 ${page === 1 ? "cursor-not-allowed opacity-50" : `${isGolden ? 'hover:bg-amber-100 hover:text-amber-700 hover:shadow-md' : 'hover:bg-emerald-100 hover:text-emerald-700 hover:shadow-md'}`}`}
 		                                onClick={() => handlePageChange(page - 1)}
 		                                disabled={page === 1}
 		                                whileHover={{ scale: page === 1 ? 1 : 1.1 }}
@@ -454,7 +454,7 @@ const Index = () => {
 		                                {getPageNumbers().map((pageNumber) => (
 		                                    <motion.button
 		                                        key={pageNumber}
-		                                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${page === pageNumber ? `${isGolden ? 'bg-amber-600' : 'bg-emerald-600'} text-white shadow-lg` : "text-gray-700 hover:bg-gray-200"}`}
+		                                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${page === pageNumber ? `${isGolden ? 'bg-gradient-to-r from-amber-600 to-yellow-600 text-white shadow-lg shadow-amber-300' : 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-300'}` : `text-gray-700 ${isGolden ? 'hover:bg-amber-100 hover:text-amber-700' : 'hover:bg-emerald-100 hover:text-emerald-700'}`}`}
 		                                        onClick={() => handlePageChange(pageNumber)}
 		                                        disabled={pageNumber > totalItems}
 		                                        whileHover={{ scale: 1.05 }}
@@ -466,7 +466,7 @@ const Index = () => {
 		                            </div>
 
 		                            <motion.button
-		                                className={`p-3 text-gray-800 rounded-full transition-all duration-200 ${page === totalItems ? "cursor-not-allowed opacity-50" : `${isGolden ? 'hover:bg-amber-50 hover:text-amber-600' : 'hover:bg-emerald-50 hover:text-emerald-600'}`}`}
+		                                className={`p-3 text-gray-700 rounded-full transition-all duration-300 ${page === totalItems ? "cursor-not-allowed opacity-50" : `${isGolden ? 'hover:bg-amber-100 hover:text-amber-700 hover:shadow-md' : 'hover:bg-emerald-100 hover:text-emerald-700 hover:shadow-md'}`}`}
 		                                onClick={() => handlePageChange(page + 1)}
 		                                disabled={page === totalItems}
 		                                whileHover={{ scale: page === totalItems ? 1 : 1.1 }}
