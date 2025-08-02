@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { MdDelete } from "react-icons/md";
 import { IoCloudUpload } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -301,168 +302,323 @@ const ContentForm = ({
 
   return (
     <Fragment>
-      <form onSubmit={handleSubmit} className="space-y-6 p-6 max-w-3xl bg-white shadow rounded mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">Category</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
-            >
-              <option value="">Select category</option>
-              {category && category.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </select>
-          </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6"
+      >
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-center mb-8"
+          >
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-amber-500 to-emerald-500 bg-clip-text text-transparent mb-2">
+              Content Management
+            </h1>
+            <p className="text-gray-400">Create and manage your content with style</p>
+          </motion.div>
 
-          {/* Conditional Fields */}
-          {formData.category && (
-            <>
-              {/* Conditional Fields for Movies */}
-              {formData.category == 2 && (
-                <div>
-                  <label className="block font-semibold text-gray-700 mb-2">Part Number</label>
-                  <input
-                    type="number"
-                    name="part_number"
-                    value={formData.part_number}
-                    onChange={handleChange}
-                    className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
-                  />
-                </div>
-              )}
+          <motion.form 
+            onSubmit={handleSubmit} 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 shadow-2xl space-y-8"
+          >
+            {/* Form Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Category Selection */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="space-y-3"
+              >
+                <label className="block text-sm font-semibold text-gray-200 mb-3">
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-amber-400 rounded-full"></span>
+                    Category
+                  </span>
+                </label>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm"
+                >
+                  <option value="" className="bg-gray-800">Select category</option>
+                  {category && category.map((cat) => (
+                    <option key={cat.id} value={cat.id} className="bg-gray-800">{cat.name}</option>
+                  ))}
+                </select>
+              </motion.div>
 
-              {/* Conditional Fields for Episodes */}
-              {formData.category == 3 && (
+              {/* Conditional Fields */}
+              {formData.category && (
                 <>
-                  <div>
-                    <label className="block font-semibold text-gray-700 mb-2">Season Number</label>
-                    <input
-                      type="number"
-                      name="season_number"
-                      value={formData.season_number}
-                      onChange={handleChange}
-                      className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
-                    />
-                  </div>
+                  {/* Conditional Fields for Movies */}
+                  {formData.category == 2 && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="space-y-3"
+                    >
+                      <label className="block text-sm font-semibold text-gray-200 mb-3">
+                        <span className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
+                          Part Number
+                        </span>
+                      </label>
+                      <input
+                        type="number"
+                        name="part_number"
+                        value={formData.part_number}
+                        onChange={handleChange}
+                        className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm"
+                        placeholder="Enter part number"
+                      />
+                    </motion.div>
+                  )}
 
-                  <div>
-                    <label className="block font-semibold text-gray-700 mb-2">Episode Number</label>
-                    <input
-                      type="number"
-                      name="episode_number"
-                      value={formData.episode_number}
-                      onChange={handleChange}
-                      className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
-                    />
-                  </div>
+                  {/* Conditional Fields for Episodes */}
+                  {formData.category == 3 && (
+                    <>
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="space-y-3"
+                      >
+                        <label className="block text-sm font-semibold text-gray-200 mb-3">
+                          <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
+                            Season Number
+                          </span>
+                        </label>
+                        <input
+                          type="number"
+                          name="season_number"
+                          value={formData.season_number}
+                          onChange={handleChange}
+                          className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm"
+                          placeholder="Enter season number"
+                        />
+                      </motion.div>
+
+                      <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="space-y-3"
+                      >
+                        <label className="block text-sm font-semibold text-gray-200 mb-3">
+                          <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
+                            Episode Number
+                          </span>
+                        </label>
+                        <input
+                          type="number"
+                          name="episode_number"
+                          value={formData.episode_number}
+                          onChange={handleChange}
+                          className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm"
+                          placeholder="Enter episode number"
+                        />
+                      </motion.div>
+                    </>
+                  )}
                 </>
               )}
-            </>
-          )}
+            </div>
 
-          {/* Common Fields */}
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">Title</label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
-              required
-            />
-          </div>
+            {/* Common Fields Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Title Field */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+                className="lg:col-span-2 space-y-3"
+              >
+                <label className="block text-sm font-semibold text-gray-200 mb-3">
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-amber-400 rounded-full"></span>
+                    Title
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm"
+                  placeholder="Enter content title"
+                  required
+                />
+              </motion.div>
 
-          <div className="md:col-span-2">
-            <label className="block font-semibold text-gray-700 mb-2">Description</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows={4}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
-              required
-            ></textarea>
-          </div>
+              {/* Description Field */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+                className="lg:col-span-2 space-y-3"
+              >
+                <label className="block text-sm font-semibold text-gray-200 mb-3">
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
+                    Description
+                  </span>
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm resize-none"
+                  placeholder="Enter content description"
+                  required
+                ></textarea>
+              </motion.div>
 
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">Year (Created At)</label>
-            <input
-              type="number"
-              name="created_at"
-              value={formData.created_at}
-              onChange={handleChange}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
-              required
-            />
-          </div>
+              {/* Year Field */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.9 }}
+                className="space-y-3"
+              >
+                <label className="block text-sm font-semibold text-gray-200 mb-3">
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
+                    Year (Created At)
+                  </span>
+                </label>
+                <input
+                  type="number"
+                  name="created_at"
+                  value={formData.created_at}
+                  onChange={handleChange}
+                  className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm"
+                  placeholder="Enter year"
+                  required
+                />
+              </motion.div>
 
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">Average Rating</label>
-            <input
-              type="number"
-              step="0.1"
-              max="5"
-              name="average_rating"
-              value={formData.average_rating}
-              onChange={handleChange}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
-              required
-            />
-          </div>
+              {/* Average Rating Field */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.0 }}
+                className="space-y-3"
+              >
+                <label className="block text-sm font-semibold text-gray-200 mb-3">
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
+                    Average Rating
+                  </span>
+                </label>
+                <input
+                  type="number"
+                  step="0.1"
+                  max="5"
+                  name="average_rating"
+                  value={formData.average_rating}
+                  onChange={handleChange}
+                  className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm"
+                  placeholder="0.0 - 5.0"
+                  required
+                />
+              </motion.div>
+            </div>
 
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">Watch Age</label>
-            <select
-              name="watch_age"
-              value={formData.watch_age}
-              onChange={handleChange}
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
-            >
-              <option value="">Select age</option>
-              {ageList && ageList.map((age) => (
-                <option key={age.id} value={age.id}>{age.age}</option>
-              ))}
+            {/* Additional Fields Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Watch Age Field */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.1 }}
+                className="space-y-3"
+              >
+                <label className="block text-sm font-semibold text-gray-200 mb-3">
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-red-400 rounded-full"></span>
+                    Watch Age
+                  </span>
+                </label>
+                <select
+                  name="watch_age"
+                  value={formData.watch_age}
+                  onChange={handleChange}
+                  className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm"
+                >
+                  <option value="" className="bg-gray-800">Select age</option>
+                  {ageList && ageList.map((age) => (
+                    <option key={age.id} value={age.id} className="bg-gray-800">{age.age}</option>
+                  ))}
             </select>
-          </div>
+          </motion.div>
 
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">Genre</label>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.6 }}
+            className="space-y-3"
+          >
+            <label className="block text-sm font-bold text-gray-200 mb-2 flex items-center gap-2">
+              <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
+              Genre Selection
+            </label>
             <select
               name="genre"
               value={formData.genre}
               onChange={handleChange}
               multiple
-              className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
+              className="w-full bg-gray-700/50 border border-gray-600 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200 backdrop-blur-sm"
             >
               {genreList && genreList.map((genre) => (
-                <option key={genre.id} className="p-2 hover:bg-gray-100" value={String(genre.id)}>
-                  {genre.name}</option>
+                <option key={genre.id} className="bg-gray-800 hover:bg-gray-700" value={String(genre.id)}>
+                  {genre.name}
+                </option>
               ))}
             </select>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-6"
+        >
           {renderImageUploader("title_image", "Title Image")}
           {renderImageUploader("poster_image", "Poster Image")}
           {renderImageUploader("backdrop_image", "Backdrop Image")}
-        </div>
+        </motion.div>
 
-        <button
+        <motion.button
           type="submit"
           disabled={!isAllImagesUploaded}
-          className={`w-full py-3 text-white cursor-pointer font-semibold rounded transition duration-200 ${
-            isAllImagesUploaded ? "bg-black hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className={`w-full py-4 text-white cursor-pointer font-bold rounded-xl transition-all duration-200 shadow-lg ${
+            isAllImagesUploaded 
+              ? "bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-600 hover:to-emerald-600" 
+              : "bg-gray-600 cursor-not-allowed"
           }`}
         >
-          { initialValues ? "Update" : "Submit" }
-        </button>
-      </form>
+          { initialValues ? "Update Content" : "Create Content" }
+        </motion.button>
+          </motion.form>
+        </div>
+      </motion.div>
     </Fragment>
   );
 };

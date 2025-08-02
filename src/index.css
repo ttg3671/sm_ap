@@ -1,29 +1,86 @@
 @import "tailwindcss";
 
+/* Base styles for professional layout */
 html, body, #root {
   box-sizing: border-box;
-  /* Apply overflow-x: hidden; only if you absolutely need to prevent
-     the *entire page* from scrolling horizontally.
-     However, be aware that this can still hide legitimate overflows
-     from children unless those children explicitly re-enable scrolling.
-     A better approach is often to structure your layout to prevent
-     unwanted horizontal overflow at the root, rather than hiding it globally. */
-   overflow-x: hidden;  /* Consider if you really need this here */
-}
-
-/* Ensure no default margin/padding if you want a tight layout */
-html, body {
-  padding: 0;
+  overflow-x: hidden;
+  height: 100%;
   margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
+/* Professional scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #f59e0b, #10b981);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #d97706, #059669);
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Custom smooth scrolling for sidebar */
+.sidebar-smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+.sidebar-smooth-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-smooth-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-smooth-scroll::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-smooth-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.6);
+}
+
+/* Enhanced smooth scrolling with momentum */
+.sidebar-content {
+  overscroll-behavior: contain;
+  scroll-snap-type: y proximity;
+}
+
+.sidebar-item {
+  scroll-snap-align: start;
+}
+
+/* Ensure proper button and icon spacing */
 button svg {
-  margin-left: 10px;
+  margin-left: 8px;
 }
 
 tbody tr td svg {
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 @theme {
