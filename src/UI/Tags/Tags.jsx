@@ -27,13 +27,14 @@ const Tags = () => {
         //   signal: controller.signal,
         // });
 
-        // Use mock data for development
+        // Use mock data for development with HR requested values
         const mockData = [
-          { id: 1, name: "Action" },
-          { id: 2, name: "Comedy" },
-          { id: 3, name: "Drama" },
-          { id: 4, name: "Thriller" },
-          { id: 5, name: "Horror" }
+          { id: 1, name: "top10" },
+          { id: 2, name: "trending now" },
+          { id: 3, name: "popular this week" },
+          { id: 4, name: "most watched" },
+          { id: 5, name: "editor's choice" },
+          { id: 6, name: "new releases" }
         ];
 
         if (isMounted) {

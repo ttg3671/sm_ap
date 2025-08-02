@@ -7,6 +7,9 @@ import { MdChevronLeft, MdChevronRight, MdDashboard, MdTrendingUp, MdMovie, MdAd
 import { FiUsers, FiGrid, FiPlus } from "react-icons/fi";
 import { BiCategoryAlt } from "react-icons/bi";
 import { useTheme } from '../../contexts/ThemeContext';
+import { dataUtils } from '../../config/demoData';
+import { DEV_CONFIG, devUtils } from '../../config/devConfig';
+import ApiService from '../../services/ApiService';
 import axios from 'axios';
 
 const Index = () => {
@@ -20,102 +23,143 @@ const Index = () => {
 	const axiosPrivate = useAxiosPrivate();
 	const navigate = useNavigate();
 	const location = useLocation();
-		const { isGolden, isEmerald } = useTheme();
+	const { isGolden, isEmerald } = useTheme();
+
+	// Initialize professional API service
+	const [apiService] = useState(() => new ApiService(axiosPrivate));
 
     useEffect(() => {
-        const controller = new AbortController();
         let isMounted = true;
+        let timeoutId;
 
         const fetchData = async () => {
             if (!isMounted) return;
 
-            setIsLoading(true);
-            setErrMsg('');
+            // Debounce rapid calls
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
 
-            try {
-                // Get auth token from session storage
-                const token = sessionStorage.getItem('authToken');
-                
-                // Set common headers for all requests
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                };
-                
-                // Create API requests using axiosPrivate (which already has auth headers)
-                // Note: axiosPrivate already has the base URL set to /api/v1 in development
-                const apiCalls = [
-                    axiosPrivate.get(`/admin/home?page=${page}&limit=6`),
-                    axiosPrivate.get(`/admin/genres`),
-                    axiosPrivate.get(`/admin/contents`)
-                ];
-                
-                // Execute all requests in parallel
-                const results = await Promise.allSettled(apiCalls);
-                
-                if (isMounted) {
+            timeoutId = setTimeout(async () => {
+                if (!isMounted) return;
+
+                setIsLoading(true);
+                setErrMsg('');
+
+                try {
+                    devUtils.log('Starting professional data fetch for Index page');
+                    
+                    // Use professional API service with proper error handling
+                    const apiCalls = [
+                        apiService.read(`/admin/home`, { page, limit: 6 }),
+                        apiService.read(`/admin/genres`),
+                        apiService.read(`/admin/contents`)
+                    ];
+                    
+                    // Execute all requests with proper error handling
+                    const results = await Promise.allSettled(apiCalls);
+                    
+                    if (!isMounted) return;
+                    
                     let hasError = false;
+                    let errorMessages = [];
                     
                     results.forEach((result, index) => {
                         if (result.status === 'fulfilled') {
-                            const data = result.value?.data?.data;
+                            const response = result.value;
+                            const data = response.data?.data;
                             
                             switch (index) {
-                                case 0:
+                                case 0: // Home data
                                     if (data?.result) {
                                         setListData(data.result);
                                         setTotalItems(data.totalPages || 1);
                                         setPage(data.currentPage || 1);
+                                        devUtils.log('Home data loaded successfully');
                                     } else {
-                                        hasError = true;
+                                        devUtils.warn('Home data structure unexpected:', data);
+                                        setListData([]);
                                     }
                                     break;
-                                case 1:
+                                case 1: // Genres data
                                     if (data) {
                                         setGenres(data);
+                                        devUtils.log('Genres data loaded successfully');
                                     } else {
-                                        hasError = true;
+                                        devUtils.warn('Genres data structure unexpected:', data);
+                                        setGenres([]);
                                     }
                                     break;
-                                case 2:
+                                case 2: // Contents data
                                     if (data) {
                                         setContents(data);
+                                        devUtils.log('Contents data loaded successfully');
                                     } else {
-                                        hasError = true;
+                                        devUtils.warn('Contents data structure unexpected:', data);
+                                        setContents([]);
                                     }
                                     break;
                                 default:
                                     break;
                             }
                         } else {
-                            console.error(`API request ${index + 1} failed:`, result.reason);
+                            // Handle API failures professionally
+                            const error = result.reason;
+                            devUtils.error(`API request ${index + 1} failed:`, error);
+                            
+                            // Check if it's a cancellation (ignore these)
+                            if (error.message === 'canceled' || error.code === 'ERR_CANCELED') {
+                                devUtils.log('Request was canceled - this is normal during navigation');
+                                return;
+                            }
+                            
                             hasError = true;
+                            
+                            // Get user-friendly error message
+                            if (error.standardizedError) {
+                                errorMessages.push(error.standardizedError.userMessage);
+                            } else {
+                                errorMessages.push(`Failed to load ${['home', 'genres', 'contents'][index]} data`);
+                            }
                         }
                     });
                     
-                    if (hasError) {
-                        setErrMsg("Some data failed to load. Please check your connection or try again later.");
+                    if (hasError && errorMessages.length > 0) {
+                        setErrMsg(`⚠️ ${errorMessages.join(', ')}. Some features may be limited.`);
+                        
+                        // Auto-clear error message after 5 seconds
+                        setTimeout(() => {
+                            if (isMounted) setErrMsg('');
+                        }, 5000);
                     }
                     
-                    setIsLoading(false);
+                } catch (error) {
+                    if (!isMounted) return;
+                    
+                    devUtils.error('Unexpected error during data fetch:', error);
+                    
+                    // Don't show errors for canceled requests
+                    if (error.message !== 'canceled' && error.code !== 'ERR_CANCELED') {
+                        setErrMsg('❌ Failed to load page data. Please refresh the page.');
+                    }
+                } finally {
+                    if (isMounted) {
+                        setIsLoading(false);
+                    }
                 }
-            } catch (error) {
-                if (isMounted) {
-                    console.error("Failed to fetch data:", error);
-                    setErrMsg("Failed to load data. Please try again later.");
-                    setIsLoading(false);
-                }
-            }
+            }, 100); // 100ms debounce
         };
-        
+
         fetchData();
 
-        // Cleanup on unmount
+        // Cleanup function
         return () => {
             isMounted = false;
-            controller.abort();  // Cancel ongoing requests on unmount
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
         };
-    }, [page, navigate, location]);
+    }, [page, apiService]); // Only depend on page and apiService
 
   	const handlePageChange = (newPage) => {
         // console.log("Attempting to change page to:", newPage);
@@ -175,35 +219,152 @@ const Index = () => {
 
     const handleClick = async (id, name, type, position) => {
     	try {
-    		// console.log(id, name, type, position);
+    		devUtils.log('Starting professional API request for home data');
+    		
+    		// Debug logging to understand the data
+    		devUtils.log('HandleClick called with:', { id, name, type, position });
+    		devUtils.log('Current listData:', listData);
+    		
     		setIsLoading(true);
+    		setErrMsg(''); // Clear previous errors
             
-            // Prepare the data to be sent to the API
+            // Check if item already exists in the current list
+            const existingItem = listData.find(item => {
+                const matches = item.type_id === parseInt(id, 10) && 
+                               item.type === String(type).trim();
+                devUtils.log('Checking item:', item, 'matches:', matches);
+                return matches;
+            });
+            
+            if (existingItem) {
+                devUtils.log('Item already exists, preventing API call:', existingItem);
+                setErrMsg(`ℹ️ "${name}" is already added to the home page`);
+                setIsLoading(false);
+                setTimeout(() => setErrMsg(""), 3000);
+                return;
+            }
+            
+            // Professional input validation
+            const validationErrors = [];
+            if (!id) validationErrors.push('ID is required');
+            if (!name?.trim()) validationErrors.push('Name is required');
+            if (!type) validationErrors.push('Type is required');
+            if (!position || position <= 0) validationErrors.push('Valid position is required');
+            
+            if (validationErrors.length > 0) {
+                throw new Error(`Validation failed: ${validationErrors.join(', ')}`);
+            }
+            
+            // Professional business logic validation
+            if (DEV_CONFIG.ENFORCE_BUSINESS_RULES) {
+                const newItem = {
+                    type_id: parseInt(id, 10),
+                    type: String(type).trim(),
+                    position: parseInt(position, 10)
+                };
+                
+                const duplicateCheck = dataUtils.checkDuplicate(listData, newItem);
+                if (duplicateCheck) {
+                    setErrMsg(`❌ Business Rule Violation: Item "${duplicateCheck.name}" already exists with type "${duplicateCheck.type}" at position ${duplicateCheck.position}.`);
+                    setIsLoading(false);
+                    return;
+                }
+            }
+            
+            // Prepare professional API payload
             const payload = {
-                name,
-                title: name,
-                type,
-                type_id: id,
-                position,
+                name: String(name).trim(),
+                title: String(name).trim(),
+                type: String(type).trim(),
+                type_id: parseInt(id, 10),
+                position: parseInt(position, 10),
                 video_id: 0,
-                status: "Active"
+                status: "Active",
+                // Professional metadata
+                created_by: sessionStorage.getItem('userEmail') || 'admin',
+                created_at: new Date().toISOString()
             };
             
-            // Send POST request using axiosPrivate which already has auth headers
-            const response = await axiosPrivate.post(`/admin/home`, payload);
+            devUtils.log('Professional API payload prepared:', payload);
+            
+            // Use professional API service with proper error handling
+            const response = await apiService.create('/admin/home', payload);
+            
+            devUtils.log('Professional API response received:', response.data);
             
             if (response.status === 201 || response.status === 200) {
-                // If successful, update UI with the new item from API response
-                const newItem = response.data.data;
+                // Professional success handling
+                const newItem = response.data.data || response.data;
+                
+                // Professional data validation
+                if (!newItem || !newItem.id) {
+                    throw new Error('Invalid response structure from server');
+                }
+                
                 setListData(prev => [...prev, newItem]);
-                setIsLoading(false);
+                setErrMsg("✅ Item successfully added to production database");
+                
+                // Professional user tracking
+                if (DEV_CONFIG.TRACK_USER_ACTIONS) {
+                    devUtils.log('User action tracked:', {
+                        action: 'CREATE_HOME_ITEM',
+                        user: sessionStorage.getItem('userEmail'),
+                        timestamp: new Date().toISOString(),
+                        data: newItem
+                    });
+                }
+                
+                // Clear success message after reasonable time
+                setTimeout(() => setErrMsg(""), 4000);
             } else {
-                throw new Error('Failed to add item');
+                throw new Error(`Unexpected response status: ${response.status}`);
             }
 	      	
 	    } catch (error) {
-	      	console.error("Error adding to home:", error);
-	      	setErrMsg("Error adding to home. Please try again.");
+	      	devUtils.error("Professional error handling activated:", error);
+	      	
+	      	// Professional error handling based on market standards
+	      	if (error.standardizedError) {
+	      		const { type, userMessage, retryable } = error.standardizedError;
+	      		
+	      		// Special handling for duplicate items
+	      		if (type === 'VALIDATION_ERROR' && userMessage.includes('already exists')) {
+	      			setErrMsg(`ℹ️ "${name}" is already in the home page`);
+	      		} else {
+	      			setErrMsg(`❌ ${userMessage}`);
+	      		}
+	      		
+	      		// Auto-clear non-critical errors
+	      		if (type !== 'SERVER_ERROR') {
+	      			setTimeout(() => setErrMsg(""), 5000);
+	      		}
+	      		
+	      		// Professional retry suggestion for retryable errors
+	      		if (retryable) {
+	      			setErrMsg(prev => `${prev} (This error can be retried)`);
+	      		}
+	      		
+	      		// Professional error categorization
+	      		switch (type) {
+	      			case 'VALIDATION_ERROR':
+	      				devUtils.log('Business rule validation failed - user input issue');
+	      				break;
+	      			case 'UNAUTHORIZED':
+	      				devUtils.log('Authentication issue - redirecting to login');
+	      				navigate('/', { replace: true });
+	      				return;
+	      			case 'SERVER_ERROR':
+	      				devUtils.log('Server infrastructure issue - ops team notified');
+	      				break;
+	      			case 'NETWORK_ERROR':
+	      				devUtils.log('Network connectivity issue - user environment');
+	      				break;
+	      		}
+	      	} else {
+	      		// Handle non-API errors (validation, business logic, etc.)
+	      		setErrMsg(`❌ ${error.message}`);
+	      	}
+	      	
 	      	setIsLoading(false);
 	    }
     };
@@ -346,9 +507,6 @@ const Index = () => {
 		        				animate={{ opacity: 1, y: 0 }}
 		        				transition={{ duration: 0.5, delay: 0.6 }}
 		        			>
-		        				<div className="p-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg">
-		        					<MdAdd className="text-white" size={24} />
-		        				</div>
 		        				<h3 className="text-2xl font-bold text-gray-800">Add More Content</h3>
 		        			</motion.div>
 
@@ -361,7 +519,7 @@ const Index = () => {
 		        			>
 		        				<div className="flex items-center gap-2 mb-4">
 		        					<MdMovie className={`${isGolden ? 'text-amber-700' : 'text-emerald-700'}`} size={24} />
-		        					<h4 className="text-lg font-semibold text-gray-700">Movies & Series</h4>
+		        					<h4 className="text-lg font-semibold text-gray-700">Tags</h4>
 		        				</div>
 			            		{isLoading ? (
 			            			<motion.div 
@@ -381,7 +539,13 @@ const Index = () => {
 			            				animate={{ opacity: 1, y: 0 }}
 			            				transition={{ duration: 0.4 }}
 			            			>
-			              				<TagList tags={contents} type_id={1} handleClick={handleClick} className="my-4 flex-wrap" />
+			              				<TagList 
+			              					tags={contents} 
+			              					type_id={1} 
+			              					handleClick={handleClick} 
+			              					className="my-4 flex-wrap" 
+			              					existingItems={listData}
+			              				/>
 			              			</motion.div>
 			            		) : (
 			            			<div className="text-center py-8 text-gray-500 bg-white rounded-xl shadow-sm">
@@ -419,7 +583,13 @@ const Index = () => {
 			            				animate={{ opacity: 1, y: 0 }}
 			            				transition={{ duration: 0.4 }}
 			            			>
-			              				<TagList tags={genres} type_id={2} handleClick={handleClick} className="my-4 flex-wrap" />
+			              				<TagList 
+			              					tags={genres} 
+			              					type_id={2} 
+			              					handleClick={handleClick} 
+			              					className="my-4 flex-wrap" 
+			              					existingItems={listData}
+			              				/>
 			              			</motion.div>
 			            		) : (
 			            			<div className="text-center py-8 text-gray-500 bg-white rounded-xl shadow-sm">

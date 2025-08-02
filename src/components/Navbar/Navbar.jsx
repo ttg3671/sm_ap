@@ -43,15 +43,10 @@ const Navbar = ({ currentUser, logoutUser }) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-16 left-0 h-[calc(100%-4rem)] w-64 ${isGolden ? 'bg-gradient-to-b from-amber-100 via-yellow-50 to-amber-100 border-r-4 border-amber-300' : 'bg-gradient-to-b from-emerald-100 via-teal-50 to-emerald-100 border-r-4 border-emerald-300'} shadow-2xl transform transition-all duration-300 z-40 backdrop-blur-sm ${
+        className={`fixed top-16 left-0 h-[calc(100%-4rem)] w-64 ${isGolden ? 'bg-gradient-to-b from-amber-100 via-yellow-50 to-amber-100 border-r-4 border-amber-300' : 'bg-gradient-to-b from-emerald-100 via-teal-50 to-emerald-100 border-r-4 border-emerald-300'} shadow-2xl transform transition-all duration-300 z-40 backdrop-blur-sm overflow-y-auto ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Sidebar Header */}
-        <div className={`p-4 ${isGolden ? 'bg-gradient-to-r from-amber-600 to-yellow-600' : 'bg-gradient-to-r from-emerald-600 to-teal-600'} text-white`}>
-          <h3 className="text-lg font-bold">Navigation</h3>
-        </div>
-        
         {/* Nav Links */}
         <ul className="p-4 space-y-3">
           <li><Link to="/home" className={`block text-lg font-semibold ${isGolden ? 'text-amber-800 hover:text-amber-600 hover:bg-amber-100' : 'text-emerald-800 hover:text-emerald-600 hover:bg-emerald-100'} px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105`}>🏠 Home</Link></li>

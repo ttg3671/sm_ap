@@ -131,37 +131,42 @@ const Slider = () => {
         <Fragment>
             <Outer className="bg-gray-100">
                 <Navbar />
-                <div className="col-span-full flex flex-col items-center justify-start pt-24 px-4 w-full">
-                    <h1 className="text-2xl font-semibold mb-4 text-gray-800 tracking-wide">
-                        SLIDER
-                    </h1>
+                <div className="col-span-full flex flex-col items-center justify-start pt-24 px-6 w-full min-h-screen">
+                    <div className="w-full max-w-7xl mx-auto">
+                        <h1 className="text-2xl font-semibold mb-8 text-gray-800 tracking-wide text-center">
+                            SLIDER
+                        </h1>
 
-                    {errMsg && (
-                        <div className="mb-4 px-4 py-2 text-red-600 bg-red-100 border border-red-200 rounded w-full max-w-4xl">
-                            {errMsg}
-                        </div>
-                    )}
-
-                    {isLoading ? (
-                        <div className="relative z-10 flex justify-center items-center h-50 pt-10">
-                            <div className="animate-spin h-12 w-12 border-4 border-blue-800 rounded-full border-t-transparent"></div>
-                        </div>
-                    ) : (
-                        sliderList.length > 0 ? (
-                            sliderList.map((content, index) => (
-                                <Card
-                                    key={index}
-                                    dataList={content}
-                                    onDelete={handleDelete}
-                                    onUpdate={handleUpdate}
-                                />
-                            ))
-                        ) : (
-                            <div className="p-4 text-center text-gray-600">
-                                No slider data found.
+                        {errMsg && (
+                            <div className="mb-6 px-4 py-3 text-red-600 bg-red-100 border border-red-200 rounded-lg w-full">
+                                {errMsg}
                             </div>
-                        )
-                    )}
+                        )}
+
+                        {isLoading ? (
+                            <div className="flex justify-center items-center h-64">
+                                <div className="animate-spin h-12 w-12 border-4 border-blue-800 rounded-full border-t-transparent"></div>
+                            </div>
+                        ) : (
+                            sliderList.length > 0 ? (
+                                <div className="card-grid-container">
+                                    {sliderList.map((content, index) => (
+                                        <div key={index} className="flex justify-center items-stretch">
+                                            <Card
+                                                dataList={content}
+                                                onDelete={handleDelete}
+                                                onUpdate={handleUpdate}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex justify-center items-center h-32 text-gray-600 bg-gray-50 rounded-lg">
+                                    <p className="text-lg">No slider data found.</p>
+                                </div>
+                            )
+                        )}
+                    </div>
                 </div>
             </Outer>
         </Fragment>

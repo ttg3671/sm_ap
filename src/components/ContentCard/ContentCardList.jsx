@@ -107,10 +107,10 @@ const ContentCardList = ({ type = "", contentList = {}, tagList = [], season = "
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6 p-6">
+    <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 flex flex-col">
       <div
         key={contentList?.id}
-        className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 flex flex-col"
+        className="w-full"
       >
         {/* Image */}
         {contentList?.poster_image && (

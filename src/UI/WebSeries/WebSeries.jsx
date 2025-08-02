@@ -193,20 +193,22 @@ const WebSeries = () => {
                         </div>
                     )}
 
-                    <div className="w-full max-w-4xl overflow-x-auto bg-white shadow-md rounded-lg">
+                    <div className="w-full max-w-7xl mx-auto p-6">
                         {isLoading ? (
                             <div className="relative z-10 flex justify-center items-center h-50 pt-10">
                                 <div className="animate-spin h-12 w-12 border-4 border-blue-800 rounded-full border-t-transparent"></div>
                             </div>
                         ) : (
-                            // Render ContentCardList only if contentList has items
+                            // Render ContentCardList in a 4-column grid layout  
                             contentList.length > 0 ? (
-                                contentList.map((content, index) => (
-                                <ContentCardList key={index} contentList={content} tagList={tags} handleDelete={handleDelete} />
-                                ))
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                    {contentList.map((content, index) => (
+                                        <ContentCardList key={index} contentList={content} tagList={tags} handleDelete={handleDelete} />
+                                    ))}
+                                </div>
                             ) : (
-                                <div className="p-4 text-center text-gray-600">
-                                No web series found.
+                                <div className="p-4 text-center text-gray-600 bg-white rounded-lg shadow-md">
+                                    No web series found.
                                 </div>
                             )
                         )}
