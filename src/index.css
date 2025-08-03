@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+html, body, #root {
+  box-sizing: border-box;
+  /* Apply overflow-x: hidden; only if you absolutely need to prevent
+     the *entire page* from scrolling horizontally.
+     However, be aware that this can still hide legitimate overflows
+     from children unless those children explicitly re-enable scrolling.
+     A better approach is often to structure your layout to prevent
+     unwanted horizontal overflow at the root, rather than hiding it globally. */
+   overflow-x: hidden;  /* Consider if you really need this here */
+}
+
+/* Ensure no default margin/padding if you want a tight layout */
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+
+button svg {
+  margin-left: 10px;
+}
+
+tbody tr td svg {
+  margin-right: 10px;
+}
+
+@theme {
+  --breakpoint-xs: 20rem;
+  --breakpoint-xd: 23rem;
+  --breakpoint-xm: 26rem;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add your custom utility for hiding scrollbar if not already defined by Tailwind */
+/* Example for hide-scrollbar (you might already have this from a plugin) */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
