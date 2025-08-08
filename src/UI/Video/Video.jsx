@@ -1,11 +1,9 @@
 import { Fragment, useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Outer, Navbar, Card } from "../../components";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import { useDispatch } from 'react-redux';
-import { setPosition } from '../../redux/position/position.actions';
 
-const Slider = () => {
+const Video = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [errMsg, setErrMsg] = useState("");
 
@@ -16,8 +14,7 @@ const Slider = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isMounted = useRef(true);
-
-    const dispatch = useDispatch();
+    const { id, type } = useParams();
 
     useEffect(() => {
         let isMounted = true;
@@ -25,13 +22,13 @@ const Slider = () => {
 
         const getCategory = async () => {
             try {
-                const response = await axiosPrivate.get("/api/v1/admin/slider", {
+                const response = await axiosPrivate.get(`/api/v1/admin/video/all/${id}/${type}`, {
                     signal: controller.signal,
                 });
 
                 if (isMounted && response.data?.isSuccess) {
-                    setSliderList(response.data?.data?.slider || []);
-                    dispatch(setPosition(response.data?.data?.next_position || 1));
+                    // console.log(id, response.data);
+                    setSliderList(response.data?.data || []);
                     setIsLoading(false);
                 }
             } catch (error) {
@@ -61,16 +58,18 @@ const Slider = () => {
             isMounted = false;
             controller.abort();
         };
-    }, [navigate, location, dispatch]);
+    }, [navigate, location]);
 
     const handleDelete = async (id) => {
-        // console.log('Delete item with ID:', id);
+        // console.log('Delete item with ID:', id, video);
         try {
-            const response = await axiosPrivate.delete(`/api/v1/admin/slider/${id}`);
+            setIsLoading(true);
+            
+            const response = await axiosPrivate.delete(`/api/v1/admin/video/${id}/${type}`);
 
             if (response.data?.isSuccess) {
                 setSliderList((prev) =>
-                    prev.filter((item) => item.slider_id !== id)
+                    prev.filter((item) => item.video !== id)
                 );
                 setIsLoading(false);
             }
@@ -95,41 +94,14 @@ const Slider = () => {
         }
     };
 
-    const handleUpdate = async (slider_id, id, type, position) => {
-        // console.log('Update item:', id, type, position);
-        try {
-            const response = await axiosPrivate.put(`/api/v1/admin/slider/${slider_id}`, {
-                video_id: id, type, position
-            });
+    const handleUpdate = async (video) => {
+        // console.log(id, video);
+        navigate(`/video/${video}/${type}`);
+    }
 
-            if (response.data?.isSuccess) {
-                setSliderList((prev) =>
-                    prev.map((item) =>
-                        item.slider_id === slider_id ? { ...item, video_id: id,type, position } : item
-                    )
-                );
-                setIsLoading(false);
-            }
-        } catch (error) {
-            console.log(error);
-            if (error.name === "CanceledError" || error.code === "ERR_CANCELED") {
-                return;
-            } else if (error.response?.status === 401) {
-                navigate("/", { state: { from: location }, replace: true });
-            } else if (error.response?.status == 400 || error.response) {
-                setErrMsg(error.response?.data?.message);
-                setIsLoading(false);
-
-                const interval = setTimeout(() => {
-                    if (isMounted) setErrMsg("");
-                }, 1000);
-
-                return () => clearTimeout(interval);
-            } else {
-                setErrMsg("Something went wrong.");
-                setIsLoading(false);
-            }
-        }
+    const handleUploadClick = () => {
+      // open file input, modal, or redirect
+      navigate(`/video/${id}/${type}?v=new`);
     };
 
     return (
@@ -138,7 +110,7 @@ const Slider = () => {
                 <Navbar />
                 <div className="col-span-full flex flex-col items-center justify-start pt-24 px-4 w-full">
                     <h1 className="text-2xl font-semibold mb-4 text-gray-800 tracking-wide">
-                        SLIDER
+                        VIDEOS
                     </h1>
 
                     {errMsg && (
@@ -152,20 +124,29 @@ const Slider = () => {
                             <div className="animate-spin h-12 w-12 border-4 border-blue-800 rounded-full border-t-transparent"></div>
                         </div>
                     ) : (
-                        sliderList.length > 0 ? (
+                        <>
+                          {sliderList.length > 0 ? (
                             sliderList.map((content, index) => (
-                                <Card
-                                    key={index}
-                                    dataList={content}
-                                    onDelete={handleDelete}
-                                    onUpdate={handleUpdate}
-                                />
+                              <Card
+                                key={index}
+                                isSlider={false}
+                                dataList={content}
+                                onDelete={handleDelete}
+                                onUpdate={handleUpdate}
+                              />
                             ))
-                        ) : (
+                          ) : (
                             <div className="p-4 text-center text-gray-600">
-                                No slider data found.
+                              <p className="mb-4">No video found.</p>
+                              <button
+                                onClick={handleUploadClick}
+                                className="inline-flex items-center justify-center bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg hover:bg-indigo-600 transition duration-200 cursor-pointer shadow-md"
+                              >
+                                Upload Video
+                              </button>
                             </div>
-                        )
+                          )}
+                        </>
                     )}
                 </div>
             </Outer>
@@ -173,4 +154,4 @@ const Slider = () => {
     )
 }
 
-export default Slider;
+export default Video;

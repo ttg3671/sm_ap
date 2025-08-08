@@ -15,6 +15,8 @@ const ContentCardList = ({ type = "", contentList = {}, tagList = [], season = "
   const dispatch = useDispatch();
   const position = useSelector(state => state.position.value);
 
+  // console.log(position);
+
   // console.log(contentList);
 
   // Initializing the selected tags state for the current contentList

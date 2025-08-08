@@ -19,7 +19,9 @@ import {
   UploadTrailer,
   Trending,
   Index,
-  Users
+  Users,
+  Trailer,
+  Video
 } from "./UI";
 
 import { ContentCardList } from "./components";
@@ -44,8 +46,10 @@ function App() {
         <Route path="/season/:series_id" element={<Season />} />
         <Route path="/episodes" element={<Episodes />} />
         <Route path="/edit/:id/:type" element={<EditContent />} />
-        <Route path="/trailers/:id/:type" element={<UploadTrailer />} />
-        <Route path="/videos/:id/:type" element={<UploadVideo />} />
+        <Route path="/trailers/:id/:type" element={<Trailer />} />
+        <Route path="/videos/:id/:type" element={<Video />} />
+        <Route path="/trailer/:id/:type" element={<UploadTrailer />} />
+        <Route path="/video/:id/:type" element={<UploadVideo />} />
       </Routes>
     </Fragment>
   )

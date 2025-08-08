@@ -16,6 +16,8 @@ import UploadTrailer from "./UploadTrailer/UploadTrailer";
 import Trending from "./Trending/Trending";
 import Index from "./Index/Index";
 import Users from "./Users/Users";
+import Trailer from "./Trailer/Trailer";
+import Video from "./Video/Video";
 
 export {
 	Login,
@@ -35,5 +37,7 @@ export {
 	UploadTrailer,
 	Trending,
 	Index,
-	Users
+	Users,
+	Trailer,
+	Video
 };
